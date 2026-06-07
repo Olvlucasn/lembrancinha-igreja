@@ -403,10 +403,10 @@
       const lines = text.trim().split("\n");
       const headers = lines[0].split(",").map(h => h.trim().replace(/^"|"$/g, ""));
       return lines.slice(1).map(line => {
-        const vals = line.match(/(".*?"|[^,]+)(?=,|$)/g) || [];
+        const vals = line.split(",").map(v => v.trim().replace(/^"|"$/g, ""));
         const obj = {};
         headers.forEach((h, i) => {
-          obj[h] = (vals[i] || "").replace(/^"|"$/g, "").trim();
+          obj[h] = (vals[i] || "").trim();
         });
         return obj;
       });
