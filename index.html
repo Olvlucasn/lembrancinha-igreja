@@ -3,133 +3,380 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lembrancinha Especial</title>
+  <title>Impacto Radical 2026</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400&display=swap');
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --creme: #EFE1CF;
+      --areia: #D7B59A;
+      --terracota: #C65A4A;
+      --vinho-medio: #9C2E2E;
+      --vinho: #4A1417;
+    }
+
     body {
+      background: var(--vinho);
+      font-family: 'Lato', sans-serif;
+      color: var(--creme);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ============ TELA 1 - BOAS VINDAS ============ */
+    #tela-boas-vindas {
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-      font-family: 'Georgia', serif;
-      color: #f0e6d3;
-      padding: 20px;
-    }
-
-    .card {
-      background: rgba(255,255,255,0.07);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 24px;
-      padding: 40px 32px;
-      max-width: 420px;
-      width: 100%;
-      text-align: center;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-    }
-
-    .cruz {
-      font-size: 28px;
-      letter-spacing: 4px;
-      color: #d4af37;
-      margin-bottom: 8px;
-    }
-
-    .evento-titulo {
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      color: #a89060;
-      margin-bottom: 28px;
-    }
-
-    .foto-wrapper {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      margin: 0 auto 20px;
-      border: 3px solid #d4af37;
+      padding: 40px 24px;
+      position: relative;
       overflow: hidden;
-      background: rgba(255,255,255,0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      text-align: center;
     }
 
-    .foto-wrapper img {
+    #tela-boas-vindas::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(198,90,74,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .foto-cristo-wrapper {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid var(--terracota);
+      margin-bottom: 28px;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.9s ease;
+      box-shadow: 0 0 40px rgba(198,90,74,0.4);
+    }
+
+    .foto-cristo-wrapper.visivel {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .foto-cristo-wrapper img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    .foto-placeholder {
-      font-size: 60px;
-      opacity: 0.4;
+    .nome-pessoa {
+      font-family: 'Playfair Display', serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--creme);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.9s ease 0.4s;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
     }
 
-    .nome {
-      font-size: 26px;
-      font-weight: bold;
-      color: #f0e6d3;
-      margin-bottom: 6px;
+    .nome-pessoa.visivel {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    .mensagem-de {
+    .versiculo {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--areia);
+      font-style: italic;
+      max-width: 340px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.9s ease 0.8s;
+      margin-bottom: 40px;
+    }
+
+    .versiculo.visivel {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .versiculo span {
+      display: block;
+      margin-top: 10px;
       font-size: 13px;
-      color: #a89060;
-      margin-bottom: 28px;
+      color: var(--terracota);
+      font-style: normal;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .btn-presente {
+      background: var(--terracota);
+      color: var(--creme);
+      border: none;
+      padding: 16px 40px;
+      border-radius: 50px;
+      font-size: 16px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 400;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.9s ease 1.2s, background 0.3s;
+      box-shadow: 0 8px 30px rgba(198,90,74,0.4);
+    }
+
+    .btn-presente.visivel {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .btn-presente:hover {
+      background: var(--vinho-medio);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(198,90,74,0.5);
+    }
+
+    /* ============ TELA 2 - TIMELINE ============ */
+    #tela-timeline {
+      display: none;
+      min-height: 100vh;
+      padding: 60px 24px 80px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .timeline-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .timeline-header .cruz {
+      font-size: 24px;
+      color: var(--terracota);
+      letter-spacing: 4px;
+      margin-bottom: 12px;
+    }
+
+    .timeline-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--creme);
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .timeline-header p {
+      font-size: 13px;
+      color: var(--areia);
       font-style: italic;
     }
 
+    /* Linha central */
+    .timeline {
+      position: relative;
+      padding: 0 0 40px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--terracota), var(--vinho-medio));
+      transform: translateX(-50%);
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 50px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.7s ease;
+      position: relative;
+    }
+
+    .timeline-item.visivel {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Itens alternados */
+    .timeline-item:nth-child(odd) {
+      flex-direction: row;
+    }
+
+    .timeline-item:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+
+    .polaroid {
+      width: 45%;
+      background: #fff;
+      padding: 8px 8px 28px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+      transform: rotate(-2deg);
+      position: relative;
+    }
+
+    .timeline-item:nth-child(even) .polaroid {
+      transform: rotate(2deg);
+    }
+
+    .polaroid img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+    }
+
+    .polaroid .legenda {
+      font-family: 'Playfair Display', serif;
+      font-size: 12px;
+      color: #333;
+      text-align: center;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    /* Ponto central */
+    .timeline-dot {
+      width: 14px;
+      height: 14px;
+      background: var(--terracota);
+      border-radius: 50%;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 2px solid var(--vinho);
+      box-shadow: 0 0 10px rgba(198,90,74,0.6);
+      z-index: 1;
+      flex-shrink: 0;
+    }
+
+    .timeline-texto {
+      width: 45%;
+      padding: 0 12px;
+      text-align: center;
+    }
+
+    .timeline-texto .numero {
+      font-size: 32px;
+      font-family: 'Playfair Display', serif;
+      color: var(--terracota);
+      opacity: 0.4;
+      line-height: 1;
+    }
+
+    .timeline-texto p {
+      font-size: 13px;
+      color: var(--areia);
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    /* ============ SEÇÃO ÁUDIO ============ */
     .audio-section {
-      background: rgba(212,175,55,0.1);
-      border: 1px solid rgba(212,175,55,0.3);
-      border-radius: 16px;
-      padding: 20px;
+      margin-top: 20px;
+      background: rgba(198,90,74,0.1);
+      border: 1px solid rgba(198,90,74,0.3);
+      border-radius: 20px;
+      padding: 28px 24px;
+      text-align: center;
+    }
+
+    .audio-section .mensagem-final {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--creme);
       margin-bottom: 24px;
     }
 
-    .audio-titulo {
-      font-size: 13px;
+    .audio-section .audio-titulo {
+      font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 2px;
-      color: #d4af37;
+      letter-spacing: 3px;
+      color: var(--terracota);
       margin-bottom: 14px;
     }
 
     audio {
       width: 100%;
       border-radius: 8px;
-      accent-color: #d4af37;
+      accent-color: var(--terracota);
     }
 
     .rodape {
+      text-align: center;
+      margin-top: 40px;
       font-size: 12px;
-      color: #6b6b8a;
-      line-height: 1.6;
+      color: rgba(239,225,207,0.4);
+      letter-spacing: 2px;
+      text-transform: uppercase;
     }
 
-    .loading {
+    /* ============ LOADING / ERRO ============ */
+    .loading, .erro {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 16px;
-      color: #a89060;
-      padding: 40px 0;
+      color: var(--areia);
+      text-align: center;
+      padding: 40px;
     }
 
-    .erro {
-      background: rgba(255,80,80,0.1);
-      border: 1px solid rgba(255,80,80,0.3);
-      border-radius: 12px;
-      padding: 20px;
-      color: #ff9090;
-      font-size: 14px;
-    }
+    .erro { color: #ff9090; }
   </style>
 </head>
 <body>
-  <div class="card" id="card">
-    <div class="loading">Carregando sua surpresa... ✨</div>
+
+  <!-- TELA 1 -->
+  <div id="tela-boas-vindas">
+    <div class="foto-cristo-wrapper" id="foto-cristo">
+      <img src="fotos/cristo.jpg" alt="Cristo" onerror="this.parentElement.style.display='none'">
+    </div>
+    <div class="nome-pessoa" id="nome-pessoa">Carregando...</div>
+    <div class="versiculo" id="versiculo">
+      Te amo, meu filho. Você é um bem de valor inestimável.
+      <span>— Jesus Cristo</span>
+    </div>
+    <button class="btn-presente" id="btn-presente" onclick="abrirTimeline()">
+      🎁 Abra seu presente
+    </button>
+  </div>
+
+  <!-- TELA 2 -->
+  <div id="tela-timeline">
+    <div class="timeline-header">
+      <div class="cruz">✝ ✝ ✝</div>
+      <h2>O seu Impacto acabou de começar</h2>
+      <p>Você vai seguir impactando pessoas e sendo impactado diariamente pela cruz de Cristo.</p>
+    </div>
+
+    <div class="timeline" id="timeline"></div>
+
+    <div class="audio-section" id="audio-section">
+      <div class="mensagem-final" id="mensagem-final"></div>
+      <div class="audio-titulo">🎙️ Uma mensagem especial para você</div>
+      <audio controls id="player-audio">
+        <source id="audio-src" src="" type="audio/mpeg">
+        Seu navegador não suporta áudio.
+      </audio>
+    </div>
+
+    <div class="rodape">Impacto Radical 2026 ✝</div>
   </div>
 
   <script>
@@ -137,8 +384,16 @@
     // CONFIGURE AQUI
     // ==============================================================
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR9XpLkTT94kaVXDuAqjKWucanyw8S6Lr4axKTQBsn27ScgGb2vB1lTFd6N56o2TJYT53YwYX2nOS_a/pub?output=csv";
-    const NOME_DO_EVENTO = "Impacto Radical 2026"; // edite o nome do evento
+
+    const LEGENDAS = [
+      "O começo de tudo",
+      "Crescendo na fé",
+      "Momentos que marcaram",
+      "Seu legado continua"
+    ];
     // ==============================================================
+
+    let dadosPessoa = null;
 
     function getParam(name) {
       return new URLSearchParams(window.location.search).get(name);
@@ -157,51 +412,77 @@
       });
     }
 
-    function render(pessoa) {
-      const card = document.getElementById("card");
-      card.innerHTML = `
-        <div class="cruz">✝</div>
-        <div class="evento-titulo">${NOME_DO_EVENTO}</div>
-
-        <div class="foto-wrapper">
-          ${pessoa.foto_url
-            ? `<img src="${pessoa.foto_url}" alt="Foto de ${pessoa.nome}" onerror="this.parentElement.innerHTML='<div class=foto-placeholder>🙏</div>'">`
-            : `<div class="foto-placeholder">🙏</div>`}
-        </div>
-
-        <div class="nome">${pessoa.nome}</div>
-        <div class="mensagem-de">Uma mensagem especial para você</div>
-
-        <div class="audio-section">
-          <div class="audio-titulo">🎙️ Ouça sua mensagem</div>
-          ${pessoa.audio_url
-            ? `<audio controls><source src="${pessoa.audio_url}">Seu navegador não suporta áudio.</audio>`
-            : `<p style="color:#a89060;font-size:13px;">Áudio em breve...</p>`}
-        </div>
-
-        <div class="rodape">
-          Com carinho e fé 🙏<br>
-          ${NOME_DO_EVENTO}
-        </div>
-      `;
+    function animarEntrada() {
+      setTimeout(() => document.getElementById('foto-cristo').classList.add('visivel'), 100);
+      setTimeout(() => document.getElementById('nome-pessoa').classList.add('visivel'), 400);
+      setTimeout(() => document.getElementById('versiculo').classList.add('visivel'), 800);
+      setTimeout(() => document.getElementById('btn-presente').classList.add('visivel'), 1200);
     }
 
-    function renderErro(msg) {
-      document.getElementById("card").innerHTML = `<div class="erro">${msg}</div>`;
+    function abrirTimeline() {
+      document.getElementById('tela-boas-vindas').style.display = 'none';
+      document.getElementById('tela-timeline').style.display = 'block';
+      window.scrollTo(0, 0);
+      construirTimeline();
+      observarTimeline();
+    }
+
+    function construirTimeline() {
+      const p = dadosPessoa;
+      const fotos = [p.foto1, p.foto2, p.foto3, p.foto4];
+      const timeline = document.getElementById('timeline');
+
+      fotos.forEach((foto, i) => {
+        const item = document.createElement('div');
+        item.className = 'timeline-item';
+        item.innerHTML = `
+          <div class="polaroid">
+            ${foto ? `<img src="${foto}" alt="Momento ${i+1}" onerror="this.src='fotos/placeholder.png'">` : `<div style="width:100%;aspect-ratio:1;background:#9C2E2E22;display:flex;align-items:center;justify-content:center;font-size:40px;">🙏</div>`}
+            <div class="legenda">${LEGENDAS[i]}</div>
+          </div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-texto">
+            <div class="numero">0${i+1}</div>
+          </div>
+        `;
+        timeline.appendChild(item);
+      });
+
+      // Mensagem final e áudio
+      document.getElementById('mensagem-final').textContent = p.mensagem_final || 'Que Deus continue escrevendo uma história linda na sua vida!';
+      const audioSrc = document.getElementById('audio-src');
+      audioSrc.src = p.audio_url || '';
+      document.getElementById('player-audio').load();
+    }
+
+    function observarTimeline() {
+      const items = document.querySelectorAll('.timeline-item');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visivel'); });
+      }, { threshold: 0.2 });
+      items.forEach(item => observer.observe(item));
     }
 
     async function init() {
       const id = getParam("id");
-      if (!id) { renderErro("Link inválido. Nenhum ID encontrado."); return; }
+      if (!id) {
+        document.body.innerHTML = '<div class="erro">Link inválido. Nenhum ID encontrado.</div>';
+        return;
+      }
       try {
         const res = await fetch(SHEET_URL);
         const text = await res.text();
         const dados = parseCSV(text);
         const pessoa = dados.find(d => d.id === id);
-        if (!pessoa) { renderErro(`Pessoa "${id}" não encontrada.`); return; }
-        render(pessoa);
-      } catch (e) {
-        renderErro("Erro ao carregar os dados. Verifique a planilha.");
+        if (!pessoa) {
+          document.body.innerHTML = `<div class="erro">Pessoa "${id}" não encontrada.</div>`;
+          return;
+        }
+        dadosPessoa = pessoa;
+        document.getElementById('nome-pessoa').textContent = pessoa.nome;
+        animarEntrada();
+      } catch(e) {
+        document.body.innerHTML = '<div class="erro">Erro ao carregar os dados.</div>';
       }
     }
 
