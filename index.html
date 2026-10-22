@@ -142,6 +142,16 @@
       background: linear-gradient(to bottom, rgba(29,27,23,.25) 0%, rgba(29,27,23,0) 18%, rgba(29,27,23,0) 55%, rgba(29,27,23,.55) 78%, var(--noite) 100%);
     }
     .cabecalho.cheia .titulo { font-size: 56px; }
+    /* Tela larga (computador): mostra a arte inteira e esmaece as laterais */
+    @media (min-aspect-ratio: 4/5) {
+      .cabecalho.cheia .arte-fundo { background-size: auto 100%; background-color: var(--noite); }
+      .cabecalho.cheia .arte-fundo::before {
+        content: ''; position: absolute; inset: 0; z-index: 1;
+        background: linear-gradient(to right, var(--noite) calc(50% - 29vh), rgba(29,27,23,0) calc(50% - 20vh), rgba(29,27,23,0) calc(50% + 20vh), var(--noite) calc(50% + 29vh));
+      }
+      .cabecalho.cheia .arte-fundo::after { z-index: 2; }
+      .cabecalho.cheia { align-items: center; text-align: center; }
+    }
     .seta-rolar {
       position: absolute; left: 50%; bottom: calc(var(--nav-altura) + 26px + env(safe-area-inset-bottom));
       width: 26px; height: 26px; margin-left: -13px; color: var(--luz); opacity: .8;
