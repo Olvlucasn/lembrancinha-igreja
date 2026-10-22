@@ -1,0 +1,16 @@
+[
+  {
+    "id": "catarina",
+    "nome": "Catarina",
+    "fotos": [
+      "fotos/catarina/01.jpg",
+      "fotos/catarina/02.jpg",
+      "fotos/catarina/03.jpg",
+      "fotos/catarina/04.jpg",
+      "fotos/catarina/05.jpg",
+      "fotos/catarina/06.jpg"
+    ],
+    "audio": "",
+    "mensagem": ""
+  }
+]

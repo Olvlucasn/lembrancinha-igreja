@@ -2,488 +2,569 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#1d1b17" />
   <title>Impacto Radical 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Lato:wght@300;400&family=Caveat&display=swap" rel="stylesheet" />
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400&display=swap');
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
     :root {
-      --creme: #EFE1CF;
-      --areia: #D7B59A;
-      --terracota: #C65A4A;
-      --vinho-medio: #9C2E2E;
-      --vinho: #4A1417;
+      --noite: #1d1b17;
+      --cinza-nevoa: #8c8676;
+      --sombra: #3a3832;
+      --luz: #e9ddb8;
+      --papel: #f4efe2;
+      --texto-suave: #cfc7b2;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Lato', system-ui, sans-serif;
+      --nav-altura: 68px;
     }
 
+    html, body { height: 100%; }
     body {
-      background: var(--vinho);
-      font-family: 'Lato', sans-serif;
-      color: var(--creme);
-      min-height: 100vh;
+      background: var(--noite);
+      color: var(--papel);
+      font-family: var(--sans);
+      font-weight: 300;
       overflow-x: hidden;
     }
 
-    /* ============ TELA 1 - BOAS VINDAS ============ */
-    #tela-boas-vindas {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 24px;
-      position: relative;
+    /* ============ NÉVOA (camadas que se movem devagar) ============ */
+    .nevoa {
+      position: fixed; inset: -20%;
+      pointer-events: none; z-index: 1;
+      background:
+        radial-gradient(40% 30% at 20% 30%, rgba(233,221,184,0.10), transparent 70%),
+        radial-gradient(35% 25% at 80% 60%, rgba(233,221,184,0.08), transparent 70%),
+        radial-gradient(50% 35% at 50% 90%, rgba(140,134,118,0.12), transparent 70%);
+      animation: deriva 28s ease-in-out infinite alternate;
+    }
+    .nevoa.n2 { animation-duration: 40s; animation-direction: alternate-reverse; opacity: .7; }
+    @keyframes deriva {
+      from { transform: translate3d(-4%, -2%, 0) scale(1); }
+      to   { transform: translate3d(4%, 3%, 0) scale(1.08); }
+    }
+
+    /* Grão de filme bem sutil */
+    .grao {
+      position: fixed; inset: 0; pointer-events: none; z-index: 50; opacity: .07;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ============ ABERTURA ============ */
+    #abertura {
+      position: fixed; inset: 0; z-index: 10;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+      text-align: center; padding: 14vh 28px 0;
       overflow: hidden;
-      text-align: center;
+      transition: opacity 1.2s ease, transform 1.2s ease;
     }
+    #abertura.saindo { opacity: 0; transform: scale(1.04); pointer-events: none; }
 
-    #tela-boas-vindas::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at center, rgba(198,90,74,0.15) 0%, transparent 70%);
-      pointer-events: none;
+    .arte-fundo {
+      position: absolute; inset: 0; z-index: -1;
+      background: center / cover no-repeat;
+      animation: aproxima 30s ease-out forwards;
     }
-
-    .foto-cristo-wrapper {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      overflow: hidden;
-      border: 3px solid var(--terracota);
-      margin-bottom: 28px;
-      opacity: 0;
-      transform: scale(0.8);
-      transition: all 0.9s ease;
-      box-shadow: 0 0 40px rgba(198,90,74,0.4);
+    .arte-fundo::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(29,27,23,.55) 0%, rgba(29,27,23,.15) 35%, rgba(29,27,23,.2) 60%, rgba(29,27,23,.9) 100%);
     }
+    @keyframes aproxima { from { transform: scale(1.12); } to { transform: scale(1); } }
 
-    .foto-cristo-wrapper.visivel {
-      opacity: 1;
-      transform: scale(1);
+    .evento {
+      font-size: 11px; letter-spacing: .45em; text-transform: uppercase;
+      color: var(--luz); opacity: 0; animation: surge 1.6s ease .3s forwards;
     }
-
-    .foto-cristo-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .nome {
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(54px, 16vw, 84px); line-height: 1;
+      margin-top: 18px; letter-spacing: .02em;
+      text-shadow: 0 2px 30px rgba(0,0,0,.5);
+      opacity: 0; filter: blur(8px);
+      animation: revela 2.4s ease 1s forwards;
     }
-
-    .nome-pessoa {
-      font-family: 'Playfair Display', serif;
-      font-size: 42px;
-      font-weight: 700;
-      color: var(--creme);
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.9s ease 0.4s;
-      margin-bottom: 20px;
-      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    .versiculo-abertura {
+      font-family: var(--serif); font-style: italic;
+      font-size: 19px; line-height: 1.5; color: var(--texto-suave);
+      max-width: 320px; margin-top: 18px;
+      opacity: 0; animation: surge 1.8s ease 2.6s forwards;
     }
-
-    .nome-pessoa.visivel {
-      opacity: 1;
-      transform: translateY(0);
+    .versiculo-abertura small {
+      display: block; margin-top: 6px; font-family: var(--sans); font-style: normal;
+      font-size: 11px; letter-spacing: .25em; text-transform: uppercase; color: var(--cinza-nevoa);
     }
-
-    .versiculo {
-      font-size: 15px;
-      line-height: 1.8;
-      color: var(--areia);
-      font-style: italic;
-      max-width: 340px;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.9s ease 0.8s;
-      margin-bottom: 40px;
-    }
-
-    .versiculo.visivel {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .versiculo span {
-      display: block;
-      margin-top: 10px;
-      font-size: 13px;
-      color: var(--terracota);
-      font-style: normal;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-
     .btn-presente {
-      background: var(--terracota);
-      color: var(--creme);
-      border: none;
-      padding: 16px 40px;
-      border-radius: 50px;
-      font-size: 16px;
-      font-family: 'Lato', sans-serif;
-      font-weight: 400;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      cursor: pointer;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.9s ease 1.2s, background 0.3s;
-      box-shadow: 0 8px 30px rgba(198,90,74,0.4);
-    }
-
-    .btn-presente.visivel {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .btn-presente:hover {
-      background: var(--vinho-medio);
-      transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(198,90,74,0.5);
-    }
-
-    /* ============ TELA 2 - TIMELINE ============ */
-    #tela-timeline {
-      display: none;
-      min-height: 100vh;
-      padding: 60px 24px 80px;
-      max-width: 480px;
-      margin: 0 auto;
-    }
-
-    .timeline-header {
-      text-align: center;
-      margin-bottom: 50px;
-    }
-
-    .timeline-header .cruz {
-      font-size: 24px;
-      color: var(--terracota);
-      letter-spacing: 4px;
-      margin-bottom: 12px;
-    }
-
-    .timeline-header h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 22px;
-      color: var(--creme);
-      line-height: 1.5;
-      margin-bottom: 8px;
-    }
-
-    .timeline-header p {
-      font-size: 13px;
-      color: var(--areia);
-      font-style: italic;
-    }
-
-    /* Linha central */
-    .timeline {
-      position: relative;
-      padding: 0 0 40px;
-    }
-
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 50%;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: linear-gradient(to bottom, var(--terracota), var(--vinho-medio));
+      position: absolute; bottom: calc(9vh + env(safe-area-inset-bottom)); left: 50%;
       transform: translateX(-50%);
+      background: transparent; color: var(--papel);
+      border: 1px solid rgba(233,221,184,.7); border-radius: 40px;
+      padding: 15px 34px; font-family: var(--sans); font-size: 13px;
+      letter-spacing: .3em; text-transform: uppercase; cursor: pointer;
+      opacity: 0; animation: surge 1.6s ease 3.8s forwards, respira 3.5s ease-in-out 5.4s infinite;
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      white-space: nowrap;
     }
-
-    .timeline-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 50px;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.7s ease;
-      position: relative;
+    @keyframes surge { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+    @keyframes respira {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(233,221,184,.0); }
+      50% { box-shadow: 0 0 28px 2px rgba(233,221,184,.25); }
     }
+    @keyframes revela { to { opacity: 1; filter: blur(0); } }
+    .btn-presente { animation-name: surgeBtn, respira; }
+    @keyframes surgeBtn { from { opacity: 0; transform: translate(-50%, 14px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
-    .timeline-item.visivel {
-      opacity: 1;
-      transform: translateY(0);
+    /* ============ APP (abas) ============ */
+    #app { position: relative; z-index: 5; display: none; min-height: 100%; }
+    #app.visivel { display: block; animation: aparece 1.2s ease; }
+    @keyframes aparece { from { opacity: 0; } to { opacity: 1; } }
+
+    .aba {
+      display: none; min-height: 100vh;
+      padding: 0 0 calc(var(--nav-altura) + 30px + env(safe-area-inset-bottom));
     }
+    .aba.ativa { display: block; animation: aparece .7s ease; }
 
-    /* Itens alternados */
-    .timeline-item:nth-child(odd) {
-      flex-direction: row;
+    .cabecalho {
+      position: relative; height: 46vh; min-height: 300px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 28px 34px; overflow: hidden;
     }
-
-    .timeline-item:nth-child(even) {
-      flex-direction: row-reverse;
+    .cabecalho .arte-fundo { animation: none; transform: none; }
+    .cabecalho .arte-fundo::after {
+      background: linear-gradient(to bottom, rgba(29,27,23,.1) 0%, rgba(29,27,23,.35) 55%, var(--noite) 100%);
     }
+    .sobretitulo { font-size: 11px; letter-spacing: .4em; text-transform: uppercase; color: var(--luz); }
+    .titulo { font-family: var(--serif); font-weight: 400; font-size: 44px; line-height: 1.05; margin-top: 8px; }
+    .subtitulo { font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--texto-suave); margin-top: 8px; }
 
+    .conteudo { padding: 10px 24px 0; max-width: 560px; margin: 0 auto; }
+
+    /* --- História: polaroids --- */
+    .linha-tempo { position: relative; padding: 20px 0 10px; }
+    .linha-tempo::before {
+      content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(233,221,184,.35) 8%, rgba(233,221,184,.35) 92%, transparent);
+    }
     .polaroid {
-      width: 45%;
-      background: #fff;
-      padding: 8px 8px 28px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-      transform: rotate(-2deg);
-      position: relative;
+      position: relative; width: 78%; margin: 0 auto 46px;
+      background: var(--papel); padding: 12px 12px 46px;
+      box-shadow: 0 18px 40px rgba(0,0,0,.55);
+      opacity: 0; transform: translateY(40px) rotate(var(--giro));
+      transition: opacity 1s ease, transform 1.1s cubic-bezier(.2,.8,.2,1);
+      cursor: zoom-in;
     }
-
-    .timeline-item:nth-child(even) .polaroid {
-      transform: rotate(2deg);
-    }
-
-    .polaroid img {
-      width: 100%;
-      aspect-ratio: 1;
-      object-fit: cover;
-      display: block;
-    }
-
+    .polaroid.visivel { opacity: 1; transform: translateY(0) rotate(var(--giro)); }
+    .polaroid img { width: 100%; display: block; aspect-ratio: 4/5; object-fit: cover; filter: sepia(.12) contrast(1.02); background: #ddd5c2; }
     .polaroid .legenda {
-      font-family: 'Playfair Display', serif;
-      font-size: 12px;
-      color: #333;
-      text-align: center;
-      margin-top: 6px;
-      line-height: 1.4;
+      position: absolute; left: 0; right: 0; bottom: 10px; text-align: center;
+      font-family: 'Caveat', cursive; font-size: 22px; color: #4a4336;
     }
-
-    /* Ponto central */
-    .timeline-dot {
-      width: 14px;
-      height: 14px;
-      background: var(--terracota);
-      border-radius: 50%;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      border: 2px solid var(--vinho);
-      box-shadow: 0 0 10px rgba(198,90,74,0.6);
-      z-index: 1;
-      flex-shrink: 0;
+    .fecho-historia {
+      text-align: center; font-family: var(--serif); font-style: italic; font-size: 21px;
+      line-height: 1.5; color: var(--texto-suave); padding: 10px 10px 0;
     }
+    .fecho-historia small { display: block; font-family: var(--sans); font-style: normal; font-size: 11px; letter-spacing: .25em; text-transform: uppercase; color: var(--cinza-nevoa); margin-top: 8px; }
 
-    .timeline-texto {
-      width: 45%;
-      padding: 0 12px;
-      text-align: center;
+    /* --- Cartão genérico --- */
+    .cartao {
+      background: rgba(244,239,226,.05);
+      border: 1px solid rgba(233,221,184,.18);
+      border-radius: 18px; padding: 26px 22px; text-align: center;
     }
+    .cartao p { font-size: 15px; line-height: 1.7; color: var(--texto-suave); }
 
-    .timeline-texto .numero {
-      font-size: 32px;
-      font-family: 'Playfair Display', serif;
-      color: var(--terracota);
-      opacity: 0.4;
-      line-height: 1;
+    /* --- Mensagem / áudio --- */
+    .onda { display: flex; gap: 4px; justify-content: center; align-items: center; height: 50px; margin: 4px 0 20px; }
+    .onda span { width: 3px; border-radius: 3px; background: var(--luz); opacity: .55; height: 12px; }
+    .tocando .onda span { animation: pulsa 1s ease-in-out infinite; }
+    @keyframes pulsa { 0%,100% { height: 10px; } 50% { height: 44px; } }
+    .btn-play {
+      width: 78px; height: 78px; border-radius: 50%;
+      border: 1px solid var(--luz); background: rgba(233,221,184,.08); color: var(--papel);
+      display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
     }
+    .btn-play svg { width: 28px; height: 28px; fill: currentColor; }
+    .em-breve { font-family: var(--serif); font-style: italic; font-size: 21px; color: var(--papel); margin-bottom: 8px; }
 
-    .timeline-texto p {
-      font-size: 13px;
-      color: var(--areia);
-      line-height: 1.6;
-      font-style: italic;
+    /* --- Potinho --- */
+    .pote-area { display: flex; flex-direction: column; align-items: center; padding-top: 6px; }
+    .pote { width: 190px; cursor: pointer; transition: transform .3s ease; }
+    .pote:active { transform: scale(.97); }
+    .pote.chacoalha { animation: chacoalha .7s ease; }
+    @keyframes chacoalha {
+      0%,100% { transform: rotate(0); } 15% { transform: rotate(-9deg); } 35% { transform: rotate(8deg); }
+      55% { transform: rotate(-6deg); } 75% { transform: rotate(4deg); }
     }
-
-    /* ============ SEÇÃO ÁUDIO ============ */
-    .audio-section {
-      margin-top: 20px;
-      background: rgba(198,90,74,0.1);
-      border: 1px solid rgba(198,90,74,0.3);
-      border-radius: 20px;
-      padding: 28px 24px;
-      text-align: center;
+    .dica-pote { margin-top: 16px; font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: var(--luz); }
+    .papel {
+      margin-top: 26px; width: 100%;
+      background: var(--papel); color: #3a3428; border-radius: 4px;
+      padding: 30px 24px 24px; text-align: center; position: relative;
+      box-shadow: 0 14px 36px rgba(0,0,0,.5);
+      transform-origin: top center;
+      animation: desdobra 1s cubic-bezier(.2,.8,.2,1);
     }
-
-    .audio-section .mensagem-final {
-      font-family: 'Playfair Display', serif;
-      font-size: 16px;
-      line-height: 1.8;
-      color: var(--creme);
-      margin-bottom: 24px;
+    .papel::before {
+      content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(58,52,40,.08);
     }
+    @keyframes desdobra { from { opacity: 0; transform: perspective(600px) rotateX(-80deg) translateY(-30px); } to { opacity: 1; transform: none; } }
+    .papel .texto { font-family: var(--serif); font-size: 23px; line-height: 1.45; }
+    .papel .ref { margin-top: 14px; font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: #7d7462; }
+    .volte { margin-top: 18px; font-size: 13px; color: var(--cinza-nevoa); text-align: center; }
 
-    .audio-section .audio-titulo {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      color: var(--terracota);
-      margin-bottom: 14px;
+    /* --- Louvor --- */
+    .spotify { width: 100%; border: 0; border-radius: 14px; height: 352px; }
+
+    /* ============ NAVEGAÇÃO INFERIOR ============ */
+    nav {
+      position: fixed; left: 12px; right: 12px; z-index: 20;
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      height: var(--nav-altura); max-width: 520px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      background: rgba(29,27,23,.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(233,221,184,.16); border-radius: 22px;
     }
-
-    audio {
-      width: 100%;
-      border-radius: 8px;
-      accent-color: var(--terracota);
+    nav button {
+      background: none; border: 0; color: var(--cinza-nevoa); cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+      font-family: var(--sans); font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+      transition: color .3s ease;
     }
+    nav button svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.4; }
+    nav button.ativo { color: var(--luz); }
 
-    .rodape {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 12px;
-      color: rgba(239,225,207,0.4);
-      letter-spacing: 2px;
-      text-transform: uppercase;
+    /* ============ FOTO AMPLIADA ============ */
+    #zoom {
+      position: fixed; inset: 0; z-index: 60; background: rgba(10,9,8,.94);
+      display: none; align-items: center; justify-content: center; padding: 20px; cursor: zoom-out;
     }
+    #zoom.aberto { display: flex; animation: aparece .3s ease; }
+    #zoom img { max-width: 100%; max-height: 90vh; box-shadow: 0 10px 50px rgba(0,0,0,.6); }
 
-    /* ============ LOADING / ERRO ============ */
-    .loading, .erro {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      color: var(--areia);
-      text-align: center;
-      padding: 40px;
-    }
-
-    .erro { color: #ff9090; }
+    .rodape { text-align: center; font-size: 10px; color: #5f5a4e; padding: 34px 20px 0; letter-spacing: .08em; }
+    .erro { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 30px; font-family: var(--serif); font-size: 22px; color: var(--texto-suave); position: relative; z-index: 30; }
   </style>
 </head>
 <body>
+  <div class="nevoa"></div>
+  <div class="nevoa n2"></div>
+  <div class="grao"></div>
 
-  <!-- TELA 1 -->
-  <div id="tela-boas-vindas">
-    <div class="foto-cristo-wrapper" id="foto-cristo">
-      <img src="fotos/cristo.jpg" alt="Cristo" onerror="this.parentElement.style.display='none'">
-    </div>
-    <div class="nome-pessoa" id="nome-pessoa">Carregando...</div>
-    <div class="versiculo" id="versiculo">
-      Te amo, meu filho. Você é um bem de valor inestimável.
-      <span>— Jesus Cristo</span>
-    </div>
-    <button class="btn-presente" id="btn-presente" onclick="abrirTimeline()">
-      🎁 Abra seu presente
+  <!-- ABERTURA -->
+  <section id="abertura">
+    <div class="arte-fundo" style="background-image:url('arte/arte1.jpg')"></div>
+    <div class="evento">Impacto Radical 2026</div>
+    <h1 class="nome" id="nome-pessoa"></h1>
+    <p class="versiculo-abertura">“Eu estarei com você todos os dias.”<small>Mateus 28:20</small></p>
+    <button class="btn-presente" onclick="abrirPresente()">Abrir meu presente</button>
+  </section>
+
+  <!-- APP -->
+  <main id="app">
+
+    <section class="aba ativa" id="aba-historia">
+      <header class="cabecalho">
+        <div class="arte-fundo" style="background-image:url('arte/arte2.jpg');background-position:center 20%"></div>
+        <div class="sobretitulo">Sua história</div>
+        <h2 class="titulo" id="titulo-historia"></h2>
+        <p class="subtitulo">Cada passo, Ele estava lá.</p>
+      </header>
+      <div class="conteudo">
+        <div class="linha-tempo" id="linha-tempo"></div>
+        <p class="fecho-historia">“Porque sou eu que conheço os planos que tenho para você.”<small>Jeremias 29:11</small></p>
+      </div>
+    </section>
+
+    <section class="aba" id="aba-mensagem">
+      <header class="cabecalho">
+        <div class="arte-fundo" style="background-image:url('arte/arte1.jpg');background-position:center 70%"></div>
+        <div class="sobretitulo">Para você</div>
+        <h2 class="titulo">Uma mensagem<br>de quem te ama</h2>
+      </header>
+      <div class="conteudo">
+        <div class="cartao" id="cartao-audio"></div>
+      </div>
+    </section>
+
+    <section class="aba" id="aba-pote">
+      <header class="cabecalho">
+        <div class="arte-fundo" style="background-image:url('arte/arte2.jpg');background-position:center 85%"></div>
+        <div class="sobretitulo">Pão diário</div>
+        <h2 class="titulo">Seu potinho<br>de promessas</h2>
+        <p class="subtitulo">Uma palavra nova para cada dia.</p>
+      </header>
+      <div class="conteudo">
+        <div class="pote-area">
+          <svg class="pote" id="pote" viewBox="0 0 200 230" onclick="tirarVersiculo()" aria-label="Tirar um versículo">
+            <rect x="58" y="10" width="84" height="26" rx="6" fill="#8c7a5a" />
+            <rect x="58" y="10" width="84" height="8" rx="4" fill="#a8956f" />
+            <path d="M52 44 Q52 36 62 36 H138 Q148 36 148 44 V52 Q178 66 178 110 V196 Q178 220 152 220 H48 Q22 220 22 196 V110 Q22 66 52 52 Z"
+                  fill="rgba(233,221,184,.10)" stroke="#e9ddb8" stroke-opacity=".55" stroke-width="2" />
+            <g opacity=".95">
+              <rect x="44" y="150" width="34" height="16" rx="2" fill="#f4efe2" transform="rotate(-18 61 158)" />
+              <rect x="80" y="160" width="36" height="16" rx="2" fill="#e9ddb8" transform="rotate(12 98 168)" />
+              <rect x="118" y="148" width="34" height="16" rx="2" fill="#f4efe2" transform="rotate(-6 135 156)" />
+              <rect x="56" y="178" width="36" height="16" rx="2" fill="#e9ddb8" transform="rotate(8 74 186)" />
+              <rect x="98" y="184" width="36" height="16" rx="2" fill="#f4efe2" transform="rotate(-14 116 192)" />
+              <rect x="128" y="176" width="30" height="16" rx="2" fill="#e9ddb8" transform="rotate(20 143 184)" />
+              <rect x="70" y="128" width="34" height="16" rx="2" fill="#e9ddb8" transform="rotate(26 87 136)" />
+              <rect x="104" y="124" width="34" height="16" rx="2" fill="#f4efe2" transform="rotate(-24 121 132)" />
+            </g>
+            <path d="M40 80 Q36 120 40 170" stroke="#fff" stroke-opacity=".18" stroke-width="5" fill="none" stroke-linecap="round" />
+          </svg>
+          <div class="dica-pote" id="dica-pote">Toque no pote</div>
+          <div id="papel-area" style="width:100%"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="aba" id="aba-louvor">
+      <header class="cabecalho">
+        <div class="arte-fundo" style="background-image:url('arte/arte1.jpg');background-position:center 30%"></div>
+        <div class="sobretitulo">Louvor</div>
+        <h2 class="titulo">Uma canção<br>para o caminho</h2>
+      </header>
+      <div class="conteudo" id="area-louvor"></div>
+    </section>
+
+    <p class="rodape">Feito com amor para o Impacto Radical 2026 · Artes: @thecrosscrusader</p>
+  </main>
+
+  <nav id="nav" style="display:none">
+    <button class="ativo" data-aba="historia" onclick="trocarAba(this)">
+      <svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1.5"/><rect x="7" y="6" width="10" height="9"/></svg>História
     </button>
-  </div>
+    <button data-aba="mensagem" onclick="trocarAba(this)">
+      <svg viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>Mensagem
+    </button>
+    <button data-aba="pote" onclick="trocarAba(this)">
+      <svg viewBox="0 0 24 24"><path d="M8 3h8v3H8zM7 6h10l1.5 3v10a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2V9z"/><path d="M9 14h6M9 17h4"/></svg>Potinho
+    </button>
+    <button data-aba="louvor" onclick="trocarAba(this)">
+      <svg viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>Louvor
+    </button>
+  </nav>
 
-  <!-- TELA 2 -->
-  <div id="tela-timeline">
-    <div class="timeline-header">
-      <div class="cruz">✝ ✝ ✝</div>
-      <h2>O seu Impacto acabou de começar</h2>
-      <p>Você vai seguir impactando pessoas e sendo impactado diariamente pela cruz de Cristo.</p>
-    </div>
-
-    <div class="timeline" id="timeline"></div>
-
-    <div class="audio-section" id="audio-section">
-      <div class="mensagem-final" id="mensagem-final"></div>
-      <div class="audio-titulo">🎙️ Uma mensagem especial para você</div>
-      <audio controls id="player-audio">
-        <source id="audio-src" src="">
-        Seu navegador não suporta áudio.
-      </audio>
-    </div>
-
-    <div class="rodape">Impacto Radical 2026 ✝</div>
-  </div>
+  <div id="zoom" onclick="this.classList.remove('aberto')"><img id="zoom-img" alt="" /></div>
 
   <script>
     // ==============================================================
     // CONFIGURE AQUI
     // ==============================================================
-    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR9XpLkTT94kaVXDuAqjKWucanyw8S6Lr4axKTQBsn27ScgGb2vB1lTFd6N56o2TJYT53YwYX2nOS_a/pub?output=csv";
+    // Link do louvor no Spotify (Compartilhar > Copiar link). Vale para todos.
+    const LOUVOR_SPOTIFY = "";
 
     const LEGENDAS = [
-      "O começo de tudo",
-      "Crescendo na fé",
-      "Momentos que marcaram",
-      "Seu legado continua"
+      "O começo de tudo", "Crescendo na fé", "Momentos que marcaram", "Com quem eu amo",
+      "Sorrisos guardados", "Graça em cada dia", "Memórias que ficam", "Lembranças de Deus",
+      "Seu jeito de ser", "Caminhando juntos", "Dias de luz", "Seu legado continua"
+    ];
+
+    const VERSICULOS = [
+      ["O Senhor é o meu pastor; nada me faltará.", "Salmos 23:1"],
+      ["Tudo posso naquele que me fortalece.", "Filipenses 4:13"],
+      ["Não temas, porque eu sou contigo.", "Isaías 41:10"],
+      ["Entrega o teu caminho ao Senhor, confia nele, e ele tudo fará.", "Salmos 37:5"],
+      ["O amor é paciente, o amor é bondoso.", "1 Coríntios 13:4"],
+      ["Lâmpada para os meus pés é a tua palavra e luz para o meu caminho.", "Salmos 119:105"],
+      ["Sede fortes e corajosos. O Senhor, vosso Deus, estará convosco por onde quer que andardes.", "Josué 1:9"],
+      ["Vinde a mim, todos os que estais cansados, e eu vos aliviarei.", "Mateus 11:28"],
+      ["Deus é o nosso refúgio e fortaleza, socorro bem presente na angústia.", "Salmos 46:1"],
+      ["Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito.", "João 3:16"],
+      ["As misericórdias do Senhor se renovam a cada manhã.", "Lamentações 3:22-23"],
+      ["Confia no Senhor de todo o teu coração.", "Provérbios 3:5"],
+      ["Aquietai-vos e sabei que eu sou Deus.", "Salmos 46:10"],
+      ["Eu sou o caminho, a verdade e a vida.", "João 14:6"],
+      ["Lançando sobre ele toda a vossa ansiedade, porque ele tem cuidado de vós.", "1 Pedro 5:7"],
+      ["Os que esperam no Senhor renovarão as suas forças.", "Isaías 40:31"],
+      ["Este é o dia que o Senhor fez; regozijemo-nos e alegremo-nos nele.", "Salmos 118:24"],
+      ["Em tudo dai graças.", "1 Tessalonicenses 5:18"],
+      ["Eu sou a luz do mundo; quem me segue não andará em trevas.", "João 8:12"],
+      ["Deixo-vos a paz, a minha paz vos dou.", "João 14:27"],
+      ["O choro pode durar uma noite, mas a alegria vem pela manhã.", "Salmos 30:5"],
+      ["Todas as coisas cooperam para o bem daqueles que amam a Deus.", "Romanos 8:28"],
+      ["Bem-aventurados os limpos de coração, porque verão a Deus.", "Mateus 5:8"],
+      ["Vós sois a luz do mundo.", "Mateus 5:14"],
+      ["Buscai primeiro o Reino de Deus, e todas estas coisas vos serão acrescentadas.", "Mateus 6:33"],
+      ["O Senhor te abençoe e te guarde.", "Números 6:24"],
+      ["Elevo os olhos para os montes: de onde me virá o socorro? O meu socorro vem do Senhor.", "Salmos 121:1-2"],
+      ["Agrada-te do Senhor, e ele satisfará os desejos do teu coração.", "Salmos 37:4"],
+      ["Ainda que eu ande pelo vale da sombra da morte, não temerei mal nenhum, porque tu estás comigo.", "Salmos 23:4"],
+      ["Nós amamos porque ele nos amou primeiro.", "1 João 4:19"],
+      ["Se Deus é por nós, quem será contra nós?", "Romanos 8:31"],
+      ["Eu sou o bom pastor. O bom pastor dá a sua vida pelas ovelhas.", "João 10:11"],
+      ["Clama a mim, e responder-te-ei.", "Jeremias 33:3"],
+      ["A alegria do Senhor é a vossa força.", "Neemias 8:10"],
+      ["Mil cairão ao teu lado e dez mil à tua direita, mas tu não serás atingido.", "Salmos 91:7"],
+      ["Ele dá força ao cansado e multiplica as forças ao que não tem nenhum vigor.", "Isaías 40:29"],
+      ["Sobre tudo o que se deve guardar, guarda o teu coração.", "Provérbios 4:23"],
+      ["Não andeis ansiosos por coisa alguma.", "Filipenses 4:6"],
+      ["Grandes coisas fez o Senhor por nós, e por isso estamos alegres.", "Salmos 126:3"],
+      ["Aquele que começou boa obra em vós há de completá-la.", "Filipenses 1:6"],
+      ["Provai e vede que o Senhor é bom.", "Salmos 34:8"],
+      ["O Senhor pelejará por vós, e vós vos calareis.", "Êxodo 14:14"],
+      ["Instruir-te-ei e te ensinarei o caminho que deves seguir.", "Salmos 32:8"],
+      ["Eis que estou à porta e bato.", "Apocalipse 3:20"],
+      ["Eu vim para que tenham vida, e a tenham em abundância.", "João 10:10"],
+      ["Se alguém está em Cristo, nova criatura é.", "2 Coríntios 5:17"],
+      ["A minha graça te basta.", "2 Coríntios 12:9"],
+      ["Bendize, ó minha alma, ao Senhor, e não te esqueças de nenhum dos seus benefícios.", "Salmos 103:2"],
+      ["Em paz me deito e logo pego no sono, porque só tu, Senhor, me fazes habitar em segurança.", "Salmos 4:8"],
+      ["O Senhor é a minha luz e a minha salvação; a quem temerei?", "Salmos 27:1"],
+      ["Ensina a criança no caminho em que deve andar.", "Provérbios 22:6"],
+      ["Alegrai-vos sempre no Senhor; outra vez digo: alegrai-vos.", "Filipenses 4:4"],
+      ["O meu Deus suprirá todas as vossas necessidades.", "Filipenses 4:19"],
+      ["Tu és precioso aos meus olhos, digno de honra, e eu te amo.", "Isaías 43:4"],
+      ["Antes que te formasse no ventre, eu te conheci.", "Jeremias 1:5"],
+      ["Eu te louvo porque de um modo assombroso e maravilhoso fui feito.", "Salmos 139:14"],
+      ["O Senhor, teu Deus, está no meio de ti; ele se deleitará em ti com alegria.", "Sofonias 3:17"],
+      ["Permanecei em mim, e eu permanecerei em vós.", "João 15:4"],
+      ["Porque onde estiverem dois ou três reunidos em meu nome, ali estou eu.", "Mateus 18:20"],
+      ["Bondade e misericórdia me seguirão todos os dias da minha vida.", "Salmos 23:6"]
     ];
     // ==============================================================
 
-    let dadosPessoa = null;
+    let pessoa = null;
 
-    function getParam(name) {
-      return new URLSearchParams(window.location.search).get(name);
+    function esc(t) {
+      return String(t || "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
     }
 
-    function parseCSV(text) {
-      const lines = text.trim().split("\n");
-      const headers = lines[0].split(",").map(h => h.trim().replace(/^"|"$/g, ""));
-      return lines.slice(1).map(line => {
-        const vals = line.split(",").map(v => v.trim().replace(/^"|"$/g, ""));
-        const obj = {};
-        headers.forEach((h, i) => {
-          obj[h] = (vals[i] || "").trim();
-        });
-        return obj;
-      });
+    function abrirPresente() {
+      document.getElementById("abertura").classList.add("saindo");
+      setTimeout(() => {
+        document.getElementById("abertura").style.display = "none";
+        document.getElementById("app").classList.add("visivel");
+        document.getElementById("nav").style.display = "grid";
+        observarPolaroids();
+      }, 1000);
     }
 
-    function animarEntrada() {
-      setTimeout(() => document.getElementById('foto-cristo').classList.add('visivel'), 100);
-      setTimeout(() => document.getElementById('nome-pessoa').classList.add('visivel'), 400);
-      setTimeout(() => document.getElementById('versiculo').classList.add('visivel'), 800);
-      setTimeout(() => document.getElementById('btn-presente').classList.add('visivel'), 1200);
-    }
-
-    function abrirTimeline() {
-      document.getElementById('tela-boas-vindas').style.display = 'none';
-      document.getElementById('tela-timeline').style.display = 'block';
+    function trocarAba(btn) {
+      document.querySelectorAll("nav button").forEach(b => b.classList.toggle("ativo", b === btn));
+      document.querySelectorAll(".aba").forEach(a => a.classList.remove("ativa"));
+      document.getElementById("aba-" + btn.dataset.aba).classList.add("ativa");
       window.scrollTo(0, 0);
-      construirTimeline();
-      observarTimeline();
+      if (btn.dataset.aba === "historia") observarPolaroids();
     }
 
-    function construirTimeline() {
-      const p = dadosPessoa;
-      const fotos = [p.foto1, p.foto2, p.foto3, p.foto4];
-      const timeline = document.getElementById('timeline');
-
-      fotos.forEach((foto, i) => {
-        const item = document.createElement('div');
-        item.className = 'timeline-item';
-        item.innerHTML = `
-          <div class="polaroid">
-            ${foto ? `<img src="${foto}" alt="Momento ${i+1}" onerror="this.src='fotos/placeholder.png'">` : `<div style="width:100%;aspect-ratio:1;background:#9C2E2E22;display:flex;align-items:center;justify-content:center;font-size:40px;">🙏</div>`}
-            <div class="legenda">${LEGENDAS[i]}</div>
-          </div>
-          <div class="timeline-dot"></div>
-          <div class="timeline-texto">
-            <div class="numero">0${i+1}</div>
-          </div>
-        `;
-        timeline.appendChild(item);
-      });
-
-      // Mensagem final e áudio
-      document.getElementById('mensagem-final').textContent = p.mensagem_final || 'Que Deus continue escrevendo uma história linda na sua vida!';
-      const audioSrc = document.getElementById('audio-src');
-      audioSrc.src = p.audio_url || '';
-      document.getElementById('player-audio').load();
+    function montarHistoria() {
+      document.getElementById("titulo-historia").textContent = pessoa.nome;
+      const linha = document.getElementById("linha-tempo");
+      linha.innerHTML = pessoa.fotos.map((foto, i) => `
+        <figure class="polaroid" style="--giro:${i % 2 ? 2.5 : -2.5}deg" onclick="ampliar('${esc(foto)}')">
+          <img src="${esc(foto)}" alt="Foto ${i + 1}" loading="lazy">
+          <figcaption class="legenda">${LEGENDAS[i % LEGENDAS.length]}</figcaption>
+        </figure>`).join("");
     }
 
-    function observarTimeline() {
-      const items = document.querySelectorAll('.timeline-item');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visivel'); });
-      }, { threshold: 0.2 });
-      items.forEach(item => observer.observe(item));
+    function observarPolaroids() {
+      const obs = new IntersectionObserver(entradas => {
+        entradas.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visivel"); obs.unobserve(e.target); } });
+      }, { threshold: 0.15 });
+      document.querySelectorAll(".polaroid:not(.visivel)").forEach(p => obs.observe(p));
+    }
+
+    function ampliar(src) {
+      document.getElementById("zoom-img").src = src;
+      document.getElementById("zoom").classList.add("aberto");
+    }
+
+    function montarAudio() {
+      const cartao = document.getElementById("cartao-audio");
+      if (!pessoa.audio) {
+        cartao.innerHTML = `
+          <div class="onda">${"<span></span>".repeat(18)}</div>
+          <p class="em-breve">Em breve…</p>
+          <p>Alguém muito especial está preparando uma mensagem só para você. Volte aqui daqui a alguns dias.</p>`;
+        return;
+      }
+      cartao.innerHTML = `
+        <div class="onda">${Array.from({ length: 18 }, (_, i) => `<span style="animation-delay:${(i % 6) * 0.12}s"></span>`).join("")}</div>
+        <button class="btn-play" id="btn-play" aria-label="Ouvir mensagem">
+          <svg viewBox="0 0 24 24" id="icone-play"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <p style="margin-top:16px">Toque para ouvir</p>
+        <audio id="audio" src="${esc(pessoa.audio)}" preload="none"></audio>`;
+      const audio = document.getElementById("audio");
+      document.getElementById("btn-play").onclick = () => audio.paused ? audio.play() : audio.pause();
+      audio.onplay = () => { cartao.classList.add("tocando"); document.getElementById("icone-play").innerHTML = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'; };
+      audio.onpause = audio.onended = () => { cartao.classList.remove("tocando"); document.getElementById("icone-play").innerHTML = '<path d="M8 5v14l11-7z"/>'; };
+    }
+
+    // Um versículo por dia: muda à meia-noite e é diferente para cada pessoa
+    function hojeChave() {
+      const d = new Date();
+      return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+    }
+    function versiculoDoDia() {
+      const d = new Date();
+      const dia = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
+      let semente = 0;
+      for (const c of pessoa.id) semente = (semente * 31 + c.charCodeAt(0)) % 9973;
+      return VERSICULOS[(dia * 7 + semente) % VERSICULOS.length];
+    }
+    function mostrarPapel(animar) {
+      const [texto, ref] = versiculoDoDia();
+      const area = document.getElementById("papel-area");
+      area.innerHTML = `
+        <div class="papel" ${animar ? "" : 'style="animation:none"'}>
+          <div class="texto">“${texto}”</div>
+          <div class="ref">${ref}</div>
+        </div>
+        <p class="volte">Volte amanhã para uma nova palavra.</p>`;
+      document.getElementById("dica-pote").textContent = "Palavra de hoje";
+    }
+    function tirarVersiculo() {
+      const chave = "pote-" + pessoa.id;
+      if (localStorage.getItem(chave) === hojeChave()) {
+        document.getElementById("papel-area").scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+      const pote = document.getElementById("pote");
+      pote.classList.remove("chacoalha"); void pote.offsetWidth; pote.classList.add("chacoalha");
+      if (navigator.vibrate) navigator.vibrate(40);
+      setTimeout(() => {
+        localStorage.setItem(chave, hojeChave());
+        mostrarPapel(true);
+        setTimeout(() => document.getElementById("papel-area").scrollIntoView({ behavior: "smooth", block: "center" }), 300);
+      }, 700);
+    }
+
+    function montarLouvor() {
+      const area = document.getElementById("area-louvor");
+      const m = LOUVOR_SPOTIFY.match(/open\.spotify\.com\/(?:intl-[a-z-]+\/)?(track|album|playlist|episode)\/([A-Za-z0-9]+)/);
+      if (!m) {
+        area.innerHTML = '<div class="cartao"><p class="em-breve">Em breve…</p><p>O louvor escolhido para você vai aparecer aqui.</p></div>';
+        return;
+      }
+      area.innerHTML = `<iframe class="spotify" src="https://open.spotify.com/embed/${m[1]}/${m[2]}?theme=0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
     }
 
     async function init() {
-      const id = getParam("id");
-      if (!id) {
-        document.body.innerHTML = '<div class="erro">Link inválido. Nenhum ID encontrado.</div>';
+      const id = (new URLSearchParams(location.search).get("id") || "").toLowerCase();
+      try {
+        const lista = await (await fetch("pessoas.json", { cache: "no-store" })).json();
+        pessoa = lista.find(p => p.id === id);
+      } catch (e) {
+        document.body.innerHTML = '<div class="erro">Não conseguimos carregar seu presente agora.<br>Tente de novo em instantes.</div>';
         return;
       }
-      try {
-        const res = await fetch(SHEET_URL);
-        const text = await res.text();
-        const dados = parseCSV(text);
-        const pessoa = dados.find(d => d.id === id);
-        if (!pessoa) {
-          document.body.innerHTML = `<div class="erro">Pessoa "${id}" não encontrada.</div>`;
-          return;
-        }
-        dadosPessoa = pessoa;
-        document.getElementById('nome-pessoa').textContent = pessoa.nome;
-        animarEntrada();
-      } catch(e) {
-        document.body.innerHTML = '<div class="erro">Erro ao carregar os dados.</div>';
+      if (!pessoa) {
+        document.body.innerHTML = '<div class="erro">Esse presente não foi encontrado.<br>Confira o QR code.</div>';
+        return;
       }
+      document.getElementById("nome-pessoa").textContent = pessoa.nome;
+      document.title = pessoa.nome + " · Impacto Radical 2026";
+      montarHistoria();
+      montarAudio();
+      montarLouvor();
+      if (localStorage.getItem("pote-" + pessoa.id) === hojeChave()) mostrarPapel(false);
     }
 
     init();
