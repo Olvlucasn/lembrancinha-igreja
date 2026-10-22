@@ -134,6 +134,21 @@
       padding: 0 28px 34px; overflow: hidden;
     }
     .cabecalho .arte-fundo { animation: none; transform: none; }
+
+    /* Capa em tela cheia: a arte ocupa a tela toda e só no fim esmaece para o fundo */
+    .cabecalho.cheia { height: 100vh; height: 100svh; padding-bottom: 96px; }
+    .cabecalho.cheia .arte-fundo { animation: aproxima 20s ease-out forwards; }
+    .cabecalho.cheia .arte-fundo::after {
+      background: linear-gradient(to bottom, rgba(29,27,23,.25) 0%, rgba(29,27,23,0) 18%, rgba(29,27,23,0) 55%, rgba(29,27,23,.55) 78%, var(--noite) 100%);
+    }
+    .cabecalho.cheia .titulo { font-size: 56px; }
+    .seta-rolar {
+      position: absolute; left: 50%; bottom: calc(var(--nav-altura) + 26px + env(safe-area-inset-bottom));
+      width: 26px; height: 26px; margin-left: -13px; color: var(--luz); opacity: .8;
+      animation: desce 2.2s ease-in-out infinite;
+    }
+    .seta-rolar svg { width: 100%; height: 100%; stroke: currentColor; fill: none; stroke-width: 1.4; }
+    @keyframes desce { 0%, 100% { transform: translateY(0); opacity: .35; } 50% { transform: translateY(8px); opacity: .9; } }
     .cabecalho .arte-fundo::after {
       background: linear-gradient(to bottom, rgba(29,27,23,.1) 0%, rgba(29,27,23,.35) 55%, var(--noite) 100%);
     }
@@ -279,11 +294,12 @@
   <main id="app">
 
     <section class="aba ativa" id="aba-historia">
-      <header class="cabecalho">
-        <div class="arte-fundo" style="background-image:url('arte/arte2.jpg');background-position:center 20%"></div>
+      <header class="cabecalho cheia">
+        <div class="arte-fundo" style="background-image:url('arte/arte2.jpg');background-position:center 35%"></div>
         <div class="sobretitulo">Sua história</div>
         <h2 class="titulo" id="titulo-historia"></h2>
         <p class="subtitulo">Cada passo, Ele estava lá.</p>
+        <div class="seta-rolar" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
       </header>
       <div class="conteudo">
         <div class="linha-tempo" id="linha-tempo"></div>
