@@ -214,7 +214,7 @@
     .volte { margin-top: 18px; font-size: 13px; color: var(--cinza-nevoa); text-align: center; }
 
     /* --- Louvor --- */
-    .spotify { width: 100%; border: 0; border-radius: 14px; height: 352px; }
+    #area-louvor iframe { width: 100%; border: 0; border-radius: 14px; }
 
     /* ============ NAVEGAÇÃO INFERIOR ============ */
     nav {
@@ -241,6 +241,21 @@
     }
     #zoom.aberto { display: flex; animation: aparece .3s ease; }
     #zoom img { max-width: 100%; max-height: 90vh; box-shadow: 0 10px 50px rgba(0,0,0,.6); }
+
+    /* ============ BOTÃO DE SOM (música de fundo) ============ */
+    .btn-som {
+      position: fixed; z-index: 40; top: calc(14px + env(safe-area-inset-top)); right: 14px;
+      width: 42px; height: 42px; border-radius: 50%;
+      background: rgba(29,27,23,.55); border: 1px solid rgba(233,221,184,.3); color: var(--luz);
+      display: none; align-items: center; justify-content: center; cursor: pointer;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .btn-som.visivel { display: flex; animation: aparece .8s ease; }
+    .btn-som svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+    .btn-som .ondas { transition: opacity .3s ease; }
+    .btn-som.mudo .ondas { opacity: 0; }
+    .btn-som.mudo .x { opacity: 1; }
+    .btn-som .x { opacity: 0; }
 
     .rodape { text-align: center; font-size: 10px; color: #5f5a4e; padding: 34px 20px 0; letter-spacing: .08em; }
     .erro { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 30px; font-family: var(--serif); font-size: 22px; color: var(--texto-suave); position: relative; z-index: 30; }
@@ -346,6 +361,10 @@
     </button>
   </nav>
 
+  <button class="btn-som" id="btn-som" onclick="alternarSom()" aria-label="Ligar ou desligar a música">
+    <svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path class="ondas" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/><path class="x" d="M16 10l5 5M21 10l-5 5"/></svg>
+  </button>
+
   <div id="zoom" onclick="this.classList.remove('aberto')"><img id="zoom-img" alt="" /></div>
 
   <script>
@@ -354,6 +373,10 @@
     // ==============================================================
     // Link do louvor no Spotify (Compartilhar > Copiar link). Vale para todos.
     const LOUVOR_SPOTIFY = "https://open.spotify.com/track/50fwjtNYnZGORsPwI1MYlG";
+
+    // Música de fundo: começa quando a pessoa toca em "Abrir meu presente".
+    // inicio = segundo da música onde começa; volume de 0 a 1.
+    const MUSICA_FUNDO = { arquivo: "audios/fundo.mp3", inicio: 0, volume: 0.35 };
 
     const LEGENDAS = [
       "O começo de tudo", "Crescendo na fé", "Momentos que marcaram", "Com quem eu amo",
@@ -431,7 +454,70 @@
       return String(t || "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
     }
 
+    // ============ MÚSICA DE FUNDO ============
+    // Usa Web Audio para o volume: no iPhone o audio.volume não funciona.
+    const fundo = { el: null, ctx: null, ganho: null, desligadoPeloUsuario: false, motivosPausa: new Set() };
+
+    function volumeFundo(alvo, segundos) {
+      if (fundo.ganho) {
+        const g = fundo.ganho.gain, agora = fundo.ctx.currentTime;
+        g.cancelScheduledValues(agora);
+        g.setValueAtTime(g.value, agora);
+        g.linearRampToValueAtTime(alvo, agora + segundos);
+      } else if (fundo.el) {
+        fundo.el.volume = alvo;
+      }
+    }
+
+    function iniciarFundo() {
+      if (!MUSICA_FUNDO.arquivo) return;
+      const el = new Audio(MUSICA_FUNDO.arquivo);
+      el.loop = true;
+      el.preload = "auto";
+      fundo.el = el;
+      try {
+        fundo.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        fundo.ganho = fundo.ctx.createGain();
+        fundo.ganho.gain.value = 0;
+        fundo.ctx.createMediaElementSource(el).connect(fundo.ganho).connect(fundo.ctx.destination);
+      } catch (e) {
+        fundo.ctx = fundo.ganho = null;
+        el.volume = 0;
+      }
+      el.addEventListener("error", () => document.getElementById("btn-som").classList.remove("visivel"));
+      el.addEventListener("loadedmetadata", () => { if (MUSICA_FUNDO.inicio) el.currentTime = MUSICA_FUNDO.inicio; }, { once: true });
+      el.play().then(() => {
+        document.getElementById("btn-som").classList.add("visivel");
+        volumeFundo(MUSICA_FUNDO.volume, 6);
+      }).catch(() => {});
+    }
+
+    function atualizarFundo() {
+      if (!fundo.el) return;
+      const deveTocar = !fundo.desligadoPeloUsuario && fundo.motivosPausa.size === 0;
+      document.getElementById("btn-som").classList.toggle("mudo", fundo.desligadoPeloUsuario);
+      if (deveTocar) {
+        if (fundo.ctx && fundo.ctx.state === "suspended") fundo.ctx.resume();
+        fundo.el.play().catch(() => {});
+        volumeFundo(MUSICA_FUNDO.volume, 2);
+      } else {
+        volumeFundo(0, 0.8);
+        clearTimeout(fundo.timer);
+        fundo.timer = setTimeout(() => { if (fundo.desligadoPeloUsuario || fundo.motivosPausa.size) fundo.el.pause(); }, 900);
+      }
+    }
+
+    function alternarSom() {
+      fundo.desligadoPeloUsuario = !fundo.desligadoPeloUsuario;
+      atualizarFundo();
+    }
+
+    // Outro som começou (áudio da família, Spotify): a música de fundo sai de cena
+    function pausarFundoPor(motivo) { fundo.motivosPausa.add(motivo); atualizarFundo(); }
+    function retomarFundoPor(motivo) { fundo.motivosPausa.delete(motivo); atualizarFundo(); }
+
     function abrirPresente() {
+      iniciarFundo();
       document.getElementById("abertura").classList.add("saindo");
       setTimeout(() => {
         document.getElementById("abertura").style.display = "none";
@@ -489,8 +575,8 @@
         <audio id="audio" src="${esc(pessoa.audio)}" preload="none"></audio>`;
       const audio = document.getElementById("audio");
       document.getElementById("btn-play").onclick = () => audio.paused ? audio.play() : audio.pause();
-      audio.onplay = () => { cartao.classList.add("tocando"); document.getElementById("icone-play").innerHTML = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'; };
-      audio.onpause = audio.onended = () => { cartao.classList.remove("tocando"); document.getElementById("icone-play").innerHTML = '<path d="M8 5v14l11-7z"/>'; };
+      audio.onplay = () => { pausarFundoPor("mensagem"); cartao.classList.add("tocando"); document.getElementById("icone-play").innerHTML = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'; };
+      audio.onpause = audio.onended = () => { retomarFundoPor("mensagem"); cartao.classList.remove("tocando"); document.getElementById("icone-play").innerHTML = '<path d="M8 5v14l11-7z"/>'; };
     }
 
     // Um versículo por dia: muda à meia-noite e é diferente para cada pessoa
@@ -539,8 +625,21 @@
         area.innerHTML = '<div class="cartao"><p class="em-breve">Em breve…</p><p>O louvor escolhido para você vai aparecer aqui.</p></div>';
         return;
       }
-      area.innerHTML = `<iframe class="spotify" src="https://open.spotify.com/embed/${m[1]}/${m[2]}?theme=0"
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>`;
+      area.innerHTML = '<div id="spotify-player"></div>';
+      // API do Spotify: avisa quando a pessoa dá play/pause, para pausar a música de fundo
+      window.onSpotifyIframeApiReady = IFrameAPI => {
+        IFrameAPI.createController(document.getElementById("spotify-player"),
+          { uri: `spotify:${m[1]}:${m[2]}`, width: "100%", height: 352, theme: "dark" },
+          controller => {
+            controller.addListener("playback_update", e => {
+              if (e.data.isPaused) retomarFundoPor("spotify"); else pausarFundoPor("spotify");
+            });
+          });
+      };
+      const script = document.createElement("script");
+      script.src = "https://open.spotify.com/embed/iframe-api/v1";
+      script.async = true;
+      document.body.appendChild(script);
     }
 
     async function init() {
