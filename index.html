@@ -18,6 +18,11 @@
       --luz: #e9ddb8;
       --papel: #f4efe2;
       --texto-suave: #cfc7b2;
+      /* versões em R,G,B para usar com transparência; o tema de cada pessoa troca tudo */
+      --noite-rgb: 29,27,23;
+      --luz-rgb: 233,221,184;
+      --papel-rgb: 244,239,226;
+      --cinza-rgb: 140,134,118;
       --serif: 'Cormorant Garamond', Georgia, serif;
       --sans: 'Lato', system-ui, sans-serif;
       --nav-altura: 68px;
@@ -37,9 +42,9 @@
       position: fixed; inset: -20%;
       pointer-events: none; z-index: 1;
       background:
-        radial-gradient(40% 30% at 20% 30%, rgba(233,221,184,0.10), transparent 70%),
-        radial-gradient(35% 25% at 80% 60%, rgba(233,221,184,0.08), transparent 70%),
-        radial-gradient(50% 35% at 50% 90%, rgba(140,134,118,0.12), transparent 70%);
+        radial-gradient(40% 30% at 20% 30%, rgba(var(--luz-rgb),0.10), transparent 70%),
+        radial-gradient(35% 25% at 80% 60%, rgba(var(--luz-rgb),0.08), transparent 70%),
+        radial-gradient(50% 35% at 50% 90%, rgba(var(--cinza-rgb),0.12), transparent 70%);
       animation: deriva 28s ease-in-out infinite alternate;
     }
     .nevoa.n2 { animation-duration: 40s; animation-direction: alternate-reverse; opacity: .7; }
@@ -71,7 +76,7 @@
     }
     .arte-fundo::after {
       content: ''; position: absolute; inset: 0;
-      background: linear-gradient(to bottom, rgba(29,27,23,.55) 0%, rgba(29,27,23,.15) 35%, rgba(29,27,23,.2) 60%, rgba(29,27,23,.9) 100%);
+      background: linear-gradient(to bottom, rgba(var(--noite-rgb),.55) 0%, rgba(var(--noite-rgb),.15) 35%, rgba(var(--noite-rgb),.2) 60%, rgba(var(--noite-rgb),.9) 100%);
     }
     @keyframes aproxima { from { transform: scale(1.12); } to { transform: scale(1); } }
 
@@ -101,7 +106,7 @@
       position: absolute; bottom: calc(9vh + env(safe-area-inset-bottom)); left: 50%;
       transform: translateX(-50%);
       background: transparent; color: var(--papel);
-      border: 1px solid rgba(233,221,184,.7); border-radius: 40px;
+      border: 1px solid rgba(var(--luz-rgb),.7); border-radius: 40px;
       padding: 15px 34px; font-family: var(--sans); font-size: 13px;
       letter-spacing: .3em; text-transform: uppercase; cursor: pointer;
       opacity: 0; animation: surge 1.6s ease 3.8s forwards, respira 3.5s ease-in-out 5.4s infinite;
@@ -110,8 +115,8 @@
     }
     @keyframes surge { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
     @keyframes respira {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(233,221,184,.0); }
-      50% { box-shadow: 0 0 28px 2px rgba(233,221,184,.25); }
+      0%, 100% { box-shadow: 0 0 0 0 rgba(var(--luz-rgb),.0); }
+      50% { box-shadow: 0 0 28px 2px rgba(var(--luz-rgb),.25); }
     }
     @keyframes revela { to { opacity: 1; filter: blur(0); } }
     .btn-presente { animation-name: surgeBtn, respira; }
@@ -119,16 +124,16 @@
 
     /* Capa clara (arte de fundo claro): texto escuro em cima */
     #abertura.clara .arte-fundo::after {
-      background: linear-gradient(to bottom, rgba(244,239,226,.25) 0%, rgba(244,239,226,0) 40%, rgba(29,27,23,0) 72%, rgba(29,27,23,.45) 100%);
+      background: linear-gradient(to bottom, rgba(var(--papel-rgb),.25) 0%, rgba(var(--papel-rgb),0) 40%, rgba(var(--noite-rgb),0) 72%, rgba(var(--noite-rgb),.45) 100%);
     }
     #abertura.clara .evento { color: #7a6c52; }
     #abertura.clara .nome { color: #2f2a22; text-shadow: none; }
     #abertura.clara .versiculo-abertura { color: #5a503f; }
     #abertura.clara .versiculo-abertura small { color: #8a7f69; opacity: 1; }
-    #abertura.clara .btn-presente { background: rgba(29,27,23,.35); border-color: rgba(244,239,226,.85); }
+    #abertura.clara .btn-presente { background: rgba(var(--noite-rgb),.35); border-color: rgba(var(--papel-rgb),.85); }
 
     /* Mais de um áudio: um bloco por mensagem */
-    .audio-item + .audio-item { margin-top: 26px; padding-top: 26px; border-top: 1px solid rgba(233,221,184,.14); }
+    .audio-item + .audio-item { margin-top: 26px; padding-top: 26px; border-top: 1px solid rgba(var(--luz-rgb),.14); }
     .audio-item .rotulo { margin-top: 14px; font-size: 12px; letter-spacing: .25em; text-transform: uppercase; color: var(--luz); }
 
     /* ============ APP (abas) ============ */
@@ -153,7 +158,7 @@
     .cabecalho.cheia { height: 100vh; height: 100svh; padding-bottom: 96px; }
     .cabecalho.cheia .arte-fundo { animation: aproxima 20s ease-out forwards; }
     .cabecalho.cheia .arte-fundo::after {
-      background: linear-gradient(to bottom, rgba(29,27,23,.25) 0%, rgba(29,27,23,0) 18%, rgba(29,27,23,0) 55%, rgba(29,27,23,.55) 78%, var(--noite) 100%);
+      background: linear-gradient(to bottom, rgba(var(--noite-rgb),.25) 0%, rgba(var(--noite-rgb),0) 18%, rgba(var(--noite-rgb),0) 55%, rgba(var(--noite-rgb),.55) 78%, var(--noite) 100%);
     }
     .cabecalho.cheia .titulo { font-size: 56px; }
     /* Tela larga (computador): mostra a arte inteira e esmaece as laterais */
@@ -161,7 +166,7 @@
       .cabecalho.cheia .arte-fundo { background-size: auto 100%; background-color: var(--noite); }
       .cabecalho.cheia .arte-fundo::before {
         content: ''; position: absolute; inset: 0; z-index: 1;
-        background: linear-gradient(to right, var(--noite) calc(50% - 29vh), rgba(29,27,23,0) calc(50% - 20vh), rgba(29,27,23,0) calc(50% + 20vh), var(--noite) calc(50% + 29vh));
+        background: linear-gradient(to right, var(--noite) calc(50% - 29vh), rgba(var(--noite-rgb),0) calc(50% - 20vh), rgba(var(--noite-rgb),0) calc(50% + 20vh), var(--noite) calc(50% + 29vh));
       }
       .cabecalho.cheia .arte-fundo::after { z-index: 2; }
       .cabecalho.cheia { align-items: center; text-align: center; }
@@ -174,7 +179,7 @@
     .seta-rolar svg { width: 100%; height: 100%; stroke: currentColor; fill: none; stroke-width: 1.4; }
     @keyframes desce { 0%, 100% { transform: translateY(0); opacity: .35; } 50% { transform: translateY(8px); opacity: .9; } }
     .cabecalho .arte-fundo::after {
-      background: linear-gradient(to bottom, rgba(29,27,23,.1) 0%, rgba(29,27,23,.35) 55%, var(--noite) 100%);
+      background: linear-gradient(to bottom, rgba(var(--noite-rgb),.1) 0%, rgba(var(--noite-rgb),.35) 55%, var(--noite) 100%);
     }
     .sobretitulo { font-size: 11px; letter-spacing: .4em; text-transform: uppercase; color: var(--luz); }
     .titulo { font-family: var(--serif); font-weight: 400; font-size: 44px; line-height: 1.05; margin-top: 8px; }
@@ -186,7 +191,7 @@
     .linha-tempo { position: relative; padding: 20px 0 10px; }
     .linha-tempo::before {
       content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px;
-      background: linear-gradient(to bottom, transparent, rgba(233,221,184,.35) 8%, rgba(233,221,184,.35) 92%, transparent);
+      background: linear-gradient(to bottom, transparent, rgba(var(--luz-rgb),.35) 8%, rgba(var(--luz-rgb),.35) 92%, transparent);
     }
     .polaroid {
       position: relative; width: 78%; margin: 0 auto 46px;
@@ -221,8 +226,8 @@
 
     /* --- Cartão genérico --- */
     .cartao {
-      background: rgba(244,239,226,.05);
-      border: 1px solid rgba(233,221,184,.18);
+      background: rgba(var(--papel-rgb),.05);
+      border: 1px solid rgba(var(--luz-rgb),.18);
       border-radius: 18px; padding: 26px 22px; text-align: center;
     }
     .cartao p { font-size: 15px; line-height: 1.7; color: var(--texto-suave); }
@@ -234,7 +239,7 @@
     @keyframes pulsa { 0%,100% { height: 10px; } 50% { height: 44px; } }
     .btn-play {
       width: 78px; height: 78px; border-radius: 50%;
-      border: 1px solid var(--luz); background: rgba(233,221,184,.08); color: var(--papel);
+      border: 1px solid var(--luz); background: rgba(var(--luz-rgb),.08); color: var(--papel);
       display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
     }
     .btn-play svg { width: 28px; height: 28px; fill: currentColor; }
@@ -242,6 +247,8 @@
 
     /* --- Potinho --- */
     .pote-area { display: flex; flex-direction: column; align-items: center; padding-top: 6px; }
+    .pote .pl { fill: var(--luz); } .pote .pp { fill: var(--papel); }
+    .pote .vidro { fill: rgba(var(--luz-rgb),.10); stroke: var(--luz); }
     .pote { width: 190px; cursor: pointer; transition: transform .3s ease; }
     .pote:active { transform: scale(.97); }
     .pote.chacoalha { animation: chacoalha .7s ease; }
@@ -272,8 +279,8 @@
       bottom: calc(12px + env(safe-area-inset-bottom));
       height: var(--nav-altura); max-width: 520px; margin: 0 auto;
       display: grid; grid-template-columns: repeat(4, 1fr);
-      background: rgba(29,27,23,.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(233,221,184,.16); border-radius: 22px;
+      background: rgba(var(--noite-rgb),.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(var(--luz-rgb),.16); border-radius: 22px;
     }
     nav button {
       background: none; border: 0; color: var(--cinza-nevoa); cursor: pointer;
@@ -296,7 +303,7 @@
     .btn-som {
       position: fixed; z-index: 40; top: calc(14px + env(safe-area-inset-top)); right: 14px;
       width: 42px; height: 42px; border-radius: 50%;
-      background: rgba(29,27,23,.55); border: 1px solid rgba(233,221,184,.3); color: var(--luz);
+      background: rgba(var(--noite-rgb),.55); border: 1px solid rgba(var(--luz-rgb),.3); color: var(--luz);
       display: none; align-items: center; justify-content: center; cursor: pointer;
       backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     }
@@ -307,7 +314,7 @@
     .btn-som.mudo .x { opacity: 1; }
     .btn-som .x { opacity: 0; }
 
-    .rodape { text-align: center; font-size: 10px; color: #5f5a4e; padding: 34px 20px 0; letter-spacing: .08em; }
+    .rodape { text-align: center; font-size: 10px; color: var(--cinza-nevoa); opacity: .7; padding: 34px 20px 0; letter-spacing: .08em; }
     .erro { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 30px; font-family: var(--serif); font-size: 22px; color: var(--texto-suave); position: relative; z-index: 30; }
   </style>
 </head>
@@ -366,16 +373,16 @@
             <rect x="58" y="10" width="84" height="26" rx="6" fill="#8c7a5a" />
             <rect x="58" y="10" width="84" height="8" rx="4" fill="#a8956f" />
             <path d="M52 44 Q52 36 62 36 H138 Q148 36 148 44 V52 Q178 66 178 110 V196 Q178 220 152 220 H48 Q22 220 22 196 V110 Q22 66 52 52 Z"
-                  fill="rgba(233,221,184,.10)" stroke="#e9ddb8" stroke-opacity=".55" stroke-width="2" />
+                  class="vidro" stroke-opacity=".55" stroke-width="2" />
             <g opacity=".95">
-              <rect x="44" y="150" width="34" height="16" rx="2" fill="#f4efe2" transform="rotate(-18 61 158)" />
-              <rect x="80" y="160" width="36" height="16" rx="2" fill="#e9ddb8" transform="rotate(12 98 168)" />
-              <rect x="118" y="148" width="34" height="16" rx="2" fill="#f4efe2" transform="rotate(-6 135 156)" />
-              <rect x="56" y="178" width="36" height="16" rx="2" fill="#e9ddb8" transform="rotate(8 74 186)" />
-              <rect x="98" y="184" width="36" height="16" rx="2" fill="#f4efe2" transform="rotate(-14 116 192)" />
-              <rect x="128" y="176" width="30" height="16" rx="2" fill="#e9ddb8" transform="rotate(20 143 184)" />
-              <rect x="70" y="128" width="34" height="16" rx="2" fill="#e9ddb8" transform="rotate(26 87 136)" />
-              <rect x="104" y="124" width="34" height="16" rx="2" fill="#f4efe2" transform="rotate(-24 121 132)" />
+              <rect x="44" y="150" width="34" height="16" rx="2" class="pp" transform="rotate(-18 61 158)" />
+              <rect x="80" y="160" width="36" height="16" rx="2" class="pl" transform="rotate(12 98 168)" />
+              <rect x="118" y="148" width="34" height="16" rx="2" class="pp" transform="rotate(-6 135 156)" />
+              <rect x="56" y="178" width="36" height="16" rx="2" class="pl" transform="rotate(8 74 186)" />
+              <rect x="98" y="184" width="36" height="16" rx="2" class="pp" transform="rotate(-14 116 192)" />
+              <rect x="128" y="176" width="30" height="16" rx="2" class="pl" transform="rotate(20 143 184)" />
+              <rect x="70" y="128" width="34" height="16" rx="2" class="pl" transform="rotate(26 87 136)" />
+              <rect x="104" y="124" width="34" height="16" rx="2" class="pp" transform="rotate(-24 121 132)" />
             </g>
             <path d="M40 80 Q36 120 40 170" stroke="#fff" stroke-opacity=".18" stroke-width="5" fill="none" stroke-linecap="round" />
           </svg>
@@ -708,6 +715,19 @@
       document.body.appendChild(script);
     }
 
+    // Paleta da pessoa, tirada da capa: { noite, luz, papel, texto, cinza }
+    function aplicarTema(t) {
+      const raiz = document.documentElement.style;
+      const rgb = hex => hex.match(/\w\w/g).map(h => parseInt(h, 16)).join(",");
+      const mapa = { noite: "noite", luz: "luz", papel: "papel", texto: "texto-suave", cinza: "cinza-nevoa" };
+      for (const [chave, nomeVar] of Object.entries(mapa)) {
+        if (!t[chave]) continue;
+        raiz.setProperty("--" + nomeVar, t[chave]);
+        if (chave !== "texto") raiz.setProperty("--" + (chave === "cinza" ? "cinza" : chave) + "-rgb", rgb(t[chave]));
+      }
+      document.querySelector('meta[name="theme-color"]').content = t.noite || "#1d1b17";
+    }
+
     async function init() {
       const id = (new URLSearchParams(location.search).get("id") || "").toLowerCase();
       try {
@@ -722,6 +742,9 @@
         return;
       }
       document.getElementById("nome-pessoa").textContent = pessoa.nome;
+      if (pessoa.tema) aplicarTema(pessoa.tema);
+      // Capa própria da pessoa também no topo de todas as abas
+      if (pessoa.capa) document.querySelectorAll(".cabecalho .arte-fundo").forEach(el => el.style.backgroundImage = `url('${pessoa.capa}')`);
       // Capa própria da pessoa (ou a arte padrão)
       document.getElementById("capa-abertura").style.backgroundImage = `url('${pessoa.capa || "arte/arte1.jpg"}')`;
       if (pessoa.capa_tema === "claro") document.getElementById("abertura").classList.add("clara");

@@ -44,7 +44,14 @@
       "audios/giovana/01.ogg",
       "audios/giovana/02.ogg"
     ],
-    "mensagem": ""
+    "mensagem": "",
+    "tema": {
+      "noite": "#2a2219",
+      "luz": "#f0b3c3",
+      "papel": "#f6f1ea",
+      "texto": "#dccfbf",
+      "cinza": "#a18c74"
+    }
   },
   {
     "id": "ramon",
@@ -77,7 +84,14 @@
       "audios/ramon/02.ogg",
       "audios/ramon/03.ogg"
     ],
-    "mensagem": ""
+    "mensagem": "",
+    "tema": {
+      "noite": "#172420",
+      "luz": "#e6c98f",
+      "papel": "#f3ead6",
+      "texto": "#cdd2c2",
+      "cinza": "#8d9479"
+    }
   },
   {
     "id": "guilherme",
@@ -109,7 +123,14 @@
     "audios": [
       "audios/guilherme/01.ogg"
     ],
-    "mensagem": ""
+    "mensagem": "",
+    "tema": {
+      "noite": "#1c1c1a",
+      "luz": "#e7e4d8",
+      "papel": "#f1efe6",
+      "texto": "#c9c6bc",
+      "cinza": "#8f8c84"
+    }
   },
   {
     "id": "isabelly",
@@ -141,6 +162,13 @@
     "audios": [
       "audios/isabelly/01.ogg"
     ],
-    "mensagem": ""
+    "mensagem": "",
+    "tema": {
+      "noite": "#251c26",
+      "luz": "#f2bfae",
+      "papel": "#fbf2ee",
+      "texto": "#e2cfd3",
+      "cinza": "#a3909c"
+    }
   }
 ]
