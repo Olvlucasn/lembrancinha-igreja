@@ -78,5 +78,37 @@
       "audios/ramon/03.ogg"
     ],
     "mensagem": ""
+  },
+  {
+    "id": "guilherme",
+    "nome": "Guilherme",
+    "capa": "fotos/guilherme/capa.jpg",
+    "capa_tema": "claro",
+    "fotos": [
+      {
+        "src": "fotos/guilherme/01.jpg",
+        "versiculo": "A minha paz vos dou.",
+        "ref": "João 14:27"
+      },
+      {
+        "src": "fotos/guilherme/02.jpg",
+        "versiculo": "Tu és meu.",
+        "ref": "Isaías 43:1"
+      },
+      {
+        "src": "fotos/guilherme/03.jpg",
+        "versiculo": "Alegre-se o teu coração nos dias da tua mocidade.",
+        "ref": "Eclesiastes 11:9"
+      },
+      {
+        "src": "fotos/guilherme/04.jpg",
+        "versiculo": "Deus é amor.",
+        "ref": "1 João 4:8"
+      }
+    ],
+    "audios": [
+      "audios/guilherme/01.ogg"
+    ],
+    "mensagem": ""
   }
 ]
