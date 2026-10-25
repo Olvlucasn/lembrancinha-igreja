@@ -45,5 +45,38 @@
       "audios/giovana/02.ogg"
     ],
     "mensagem": ""
+  },
+  {
+    "id": "ramon",
+    "nome": "Ramon",
+    "capa": "fotos/ramon/capa.jpg",
+    "fotos": [
+      {
+        "src": "fotos/ramon/01.jpg",
+        "versiculo": "Ele tem cuidado de vós.",
+        "ref": "1 Pedro 5:7"
+      },
+      {
+        "src": "fotos/ramon/02.jpg",
+        "versiculo": "O amor jamais acaba.",
+        "ref": "1 Coríntios 13:8"
+      },
+      {
+        "src": "fotos/ramon/03.jpg",
+        "versiculo": "A palavra de Deus permanece em vós.",
+        "ref": "1 João 2:14"
+      },
+      {
+        "src": "fotos/ramon/04.jpg",
+        "versiculo": "Aquele que começou boa obra em vós há de completá-la.",
+        "ref": "Filipenses 1:6"
+      }
+    ],
+    "audios": [
+      "audios/ramon/01.ogg",
+      "audios/ramon/02.ogg",
+      "audios/ramon/03.ogg"
+    ],
+    "mensagem": ""
   }
 ]
