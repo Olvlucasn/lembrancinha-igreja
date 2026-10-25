@@ -745,6 +745,12 @@
       if (pessoa.tema) aplicarTema(pessoa.tema);
       // Capa própria da pessoa também no topo de todas as abas
       if (pessoa.capa) document.querySelectorAll(".cabecalho .arte-fundo").forEach(el => el.style.backgroundImage = `url('${pessoa.capa}')`);
+      // Sobe a arte da capa da História (em % da tela) para as figuras não ficarem atrás do nome
+      if (pessoa.subir_historia) {
+        const arte = document.querySelector(".cabecalho.cheia .arte-fundo");
+        arte.style.top = `-${pessoa.subir_historia}%`;
+        arte.style.bottom = `${pessoa.subir_historia}%`;
+      }
       // Capa própria da pessoa (ou a arte padrão)
       document.getElementById("capa-abertura").style.backgroundImage = `url('${pessoa.capa || "arte/arte1.jpg"}')`;
       if (pessoa.capa_tema === "claro") document.getElementById("abertura").classList.add("clara");

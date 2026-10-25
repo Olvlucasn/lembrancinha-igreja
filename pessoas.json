@@ -51,7 +51,8 @@
       "papel": "#f6f1ea",
       "texto": "#dccfbf",
       "cinza": "#a18c74"
-    }
+    },
+    "subir_historia": 26
   },
   {
     "id": "ramon",
@@ -91,7 +92,8 @@
       "papel": "#f3ead6",
       "texto": "#cdd2c2",
       "cinza": "#8d9479"
-    }
+    },
+    "subir_historia": 10
   },
   {
     "id": "guilherme",
@@ -169,6 +171,7 @@
       "papel": "#fbf2ee",
       "texto": "#e2cfd3",
       "cinza": "#a3909c"
-    }
+    },
+    "subir_historia": 22
   }
 ]
