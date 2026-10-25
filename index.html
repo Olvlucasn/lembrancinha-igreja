@@ -132,6 +132,22 @@
     #abertura.clara .versiculo-abertura small { color: #8a7f69; opacity: 1; }
     #abertura.clara .btn-presente { background: rgba(var(--noite-rgb),.35); border-color: rgba(var(--papel-rgb),.85); }
 
+    /* Abertura com o texto embaixo (capas com figura no meio da tela) */
+    #abertura.baixo { justify-content: flex-end; padding: 0 28px calc(9vh + 92px + env(safe-area-inset-bottom)); }
+    #abertura.baixo .arte-fundo::after {
+      background: linear-gradient(to bottom, rgba(var(--noite-rgb),.15) 0%, rgba(var(--noite-rgb),0) 35%, rgba(var(--noite-rgb),.55) 68%, rgba(var(--noite-rgb),.92) 100%);
+    }
+
+    /* Tela larga (computador): a abertura mostra a arte inteira e esmaece as laterais */
+    @media (min-aspect-ratio: 4/5) {
+      #abertura .arte-fundo { background-size: auto 100%; background-color: var(--noite); }
+      #abertura .arte-fundo::before {
+        content: ''; position: absolute; inset: 0; z-index: 1;
+        background: linear-gradient(to right, var(--noite) calc(50% - 29vh), rgba(var(--noite-rgb),0) calc(50% - 20vh), rgba(var(--noite-rgb),0) calc(50% + 20vh), var(--noite) calc(50% + 29vh));
+      }
+      #abertura .arte-fundo::after { z-index: 2; }
+    }
+
     /* Mais de um áudio: um bloco por mensagem */
     .audio-item + .audio-item { margin-top: 26px; padding-top: 26px; border-top: 1px solid rgba(var(--luz-rgb),.14); }
     .audio-item .rotulo { margin-top: 14px; font-size: 12px; letter-spacing: .25em; text-transform: uppercase; color: var(--luz); }
@@ -754,6 +770,7 @@
       // Capa própria da pessoa (ou a arte padrão)
       document.getElementById("capa-abertura").style.backgroundImage = `url('${pessoa.capa || "arte/arte1.jpg"}')`;
       if (pessoa.capa_tema === "claro") document.getElementById("abertura").classList.add("clara");
+      if (pessoa.abertura === "baixo") document.getElementById("abertura").classList.add("baixo");
       document.title = pessoa.nome + " · Impacto Radical 2026";
       montarHistoria();
       montarAudio();

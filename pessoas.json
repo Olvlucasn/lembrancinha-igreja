@@ -99,7 +99,6 @@
     "id": "guilherme",
     "nome": "Guilherme",
     "capa": "fotos/guilherme/capa.jpg",
-    "capa_tema": "claro",
     "fotos": [
       {
         "src": "fotos/guilherme/01.jpg",
@@ -132,7 +131,8 @@
       "papel": "#f1efe6",
       "texto": "#c9c6bc",
       "cinza": "#8f8c84"
-    }
+    },
+    "abertura": "baixo"
   },
   {
     "id": "isabelly",
