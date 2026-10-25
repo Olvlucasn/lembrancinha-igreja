@@ -12,5 +12,38 @@
     ],
     "audio": "",
     "mensagem": ""
+  },
+  {
+    "id": "giovana",
+    "nome": "Giovana",
+    "capa": "fotos/giovana/capa.jpg",
+    "capa_tema": "claro",
+    "fotos": [
+      {
+        "src": "fotos/giovana/01.jpg",
+        "versiculo": "A palavra de Deus permanece em vós.",
+        "ref": "1 João 2:14"
+      },
+      {
+        "src": "fotos/giovana/02.jpg",
+        "versiculo": "Eis que faço novas todas as coisas.",
+        "ref": "Apocalipse 21:5"
+      },
+      {
+        "src": "fotos/giovana/03.jpg",
+        "versiculo": "Tudo posso naquele que me fortalece.",
+        "ref": "Filipenses 4:13"
+      },
+      {
+        "src": "fotos/giovana/04.jpg",
+        "versiculo": "O Senhor está perto.",
+        "ref": "Filipenses 4:5"
+      }
+    ],
+    "audios": [
+      "audios/giovana/01.ogg",
+      "audios/giovana/02.ogg"
+    ],
+    "mensagem": ""
   }
 ]

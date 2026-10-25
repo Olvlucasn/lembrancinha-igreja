@@ -117,6 +117,20 @@
     .btn-presente { animation-name: surgeBtn, respira; }
     @keyframes surgeBtn { from { opacity: 0; transform: translate(-50%, 14px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
+    /* Capa clara (arte de fundo claro): texto escuro em cima */
+    #abertura.clara .arte-fundo::after {
+      background: linear-gradient(to bottom, rgba(244,239,226,.25) 0%, rgba(244,239,226,0) 40%, rgba(29,27,23,0) 72%, rgba(29,27,23,.45) 100%);
+    }
+    #abertura.clara .evento { color: #7a6c52; }
+    #abertura.clara .nome { color: #2f2a22; text-shadow: none; }
+    #abertura.clara .versiculo-abertura { color: #5a503f; }
+    #abertura.clara .versiculo-abertura small { color: #8a7f69; opacity: 1; }
+    #abertura.clara .btn-presente { background: rgba(29,27,23,.35); border-color: rgba(244,239,226,.85); }
+
+    /* Mais de um áudio: um bloco por mensagem */
+    .audio-item + .audio-item { margin-top: 26px; padding-top: 26px; border-top: 1px solid rgba(233,221,184,.14); }
+    .audio-item .rotulo { margin-top: 14px; font-size: 12px; letter-spacing: .25em; text-transform: uppercase; color: var(--luz); }
+
     /* ============ APP (abas) ============ */
     #app { position: relative; z-index: 5; display: none; min-height: 100%; }
     #app.visivel { display: block; animation: aparece 1.2s ease; }
@@ -188,6 +202,17 @@
       position: absolute; left: 0; right: 0; bottom: 10px; text-align: center;
       font-family: 'Caveat', cursive; font-size: 22px; color: #4a4336;
     }
+    /* Versículo escrito embaixo de cada foto */
+    .polaroid.com-versiculo { padding-bottom: 16px; }
+    .polaroid .versiculo-foto {
+      text-align: center; padding: 14px 6px 0;
+      font-family: 'Caveat', cursive; font-size: 24px; line-height: 1.15; color: #4a4336;
+    }
+    .polaroid .versiculo-foto small {
+      display: block; margin-top: 6px; font-family: var(--sans); font-size: 10px;
+      letter-spacing: .25em; text-transform: uppercase; color: #8a7f69;
+    }
+
     .fecho-historia {
       text-align: center; font-family: var(--serif); font-style: italic; font-size: 21px;
       line-height: 1.5; color: var(--texto-suave); padding: 10px 10px 0;
@@ -205,7 +230,7 @@
     /* --- Mensagem / áudio --- */
     .onda { display: flex; gap: 4px; justify-content: center; align-items: center; height: 50px; margin: 4px 0 20px; }
     .onda span { width: 3px; border-radius: 3px; background: var(--luz); opacity: .55; height: 12px; }
-    .tocando .onda span { animation: pulsa 1s ease-in-out infinite; }
+    .tocando .onda span, .audio-item.tocando .onda span { animation: pulsa 1s ease-in-out infinite; }
     @keyframes pulsa { 0%,100% { height: 10px; } 50% { height: 44px; } }
     .btn-play {
       width: 78px; height: 78px; border-radius: 50%;
@@ -293,7 +318,7 @@
 
   <!-- ABERTURA -->
   <section id="abertura">
-    <div class="arte-fundo" style="background-image:url('arte/arte1.jpg')"></div>
+    <div class="arte-fundo" id="capa-abertura"></div>
     <div class="evento">Impacto Radical 2026</div>
     <h1 class="nome" id="nome-pessoa"></h1>
     <p class="versiculo-abertura">“Eu estarei com você todos os dias.”<small>Mateus 28:20</small></p>
@@ -564,10 +589,14 @@
     function montarHistoria() {
       document.getElementById("titulo-historia").textContent = pessoa.nome;
       const linha = document.getElementById("linha-tempo");
-      linha.innerHTML = pessoa.fotos.map((foto, i) => `
-        <figure class="polaroid" style="--giro:${i % 2 ? 2.5 : -2.5}deg" onclick="ampliar('${esc(foto)}')">
-          <img src="${esc(foto)}" alt="Foto ${i + 1}" loading="lazy">
-          <figcaption class="legenda">${LEGENDAS[i % LEGENDAS.length]}</figcaption>
+      // Cada foto pode ser só o caminho ou { src, versiculo, ref }
+      const fotos = pessoa.fotos.map(f => typeof f === "string" ? { src: f } : f);
+      linha.innerHTML = fotos.map((foto, i) => `
+        <figure class="polaroid ${foto.versiculo ? "com-versiculo" : ""}" style="--giro:${i % 2 ? 2.5 : -2.5}deg" onclick="ampliar('${esc(foto.src)}')">
+          <img src="${esc(foto.src)}" alt="Foto ${i + 1}" loading="lazy">
+          ${foto.versiculo
+            ? `<figcaption class="versiculo-foto">“${esc(foto.versiculo)}”<small>${esc(foto.ref)}</small></figcaption>`
+            : `<figcaption class="legenda">${LEGENDAS[i % LEGENDAS.length]}</figcaption>`}
         </figure>`).join("");
     }
 
@@ -585,24 +614,35 @@
 
     function montarAudio() {
       const cartao = document.getElementById("cartao-audio");
-      if (!pessoa.audio) {
+      const lista = pessoa.audios || (pessoa.audio ? [pessoa.audio] : []);
+      if (!lista.length) {
         cartao.innerHTML = `
           <div class="onda">${"<span></span>".repeat(18)}</div>
           <p class="em-breve">Em breve…</p>
           <p>Alguém muito especial está preparando uma mensagem só para você. Volte aqui daqui a alguns dias.</p>`;
         return;
       }
-      cartao.innerHTML = `
-        <div class="onda">${Array.from({ length: 18 }, (_, i) => `<span style="animation-delay:${(i % 6) * 0.12}s"></span>`).join("")}</div>
-        <button class="btn-play" id="btn-play" aria-label="Ouvir mensagem">
-          <svg viewBox="0 0 24 24" id="icone-play"><path d="M8 5v14l11-7z"/></svg>
-        </button>
-        <p style="margin-top:16px">Toque para ouvir</p>
-        <audio id="audio" src="${esc(pessoa.audio)}" preload="none"></audio>`;
-      const audio = document.getElementById("audio");
-      document.getElementById("btn-play").onclick = () => audio.paused ? audio.play() : audio.pause();
-      audio.onplay = () => { pausarFundoPor("mensagem"); cartao.classList.add("tocando"); document.getElementById("icone-play").innerHTML = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'; };
-      audio.onpause = audio.onended = () => { retomarFundoPor("mensagem"); cartao.classList.remove("tocando"); document.getElementById("icone-play").innerHTML = '<path d="M8 5v14l11-7z"/>'; };
+      const PLAY = '<path d="M8 5v14l11-7z"/>', PAUSE = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
+      cartao.innerHTML = lista.map((src, n) => `
+        <div class="audio-item" id="item-audio-${n}">
+          <div class="onda">${Array.from({ length: 18 }, (_, i) => `<span style="animation-delay:${(i % 6) * 0.12}s"></span>`).join("")}</div>
+          <button class="btn-play" aria-label="Ouvir mensagem ${n + 1}"><svg viewBox="0 0 24 24">${PLAY}</svg></button>
+          <p class="rotulo">${lista.length > 1 ? "Mensagem " + (n + 1) : "Toque para ouvir"}</p>
+          <audio src="${esc(src)}" preload="none"></audio>
+        </div>`).join("");
+      const audios = [...cartao.querySelectorAll("audio")];
+      audios.forEach((audio, n) => {
+        const item = document.getElementById("item-audio-" + n);
+        const icone = item.querySelector("svg");
+        item.querySelector(".btn-play").onclick = () => {
+          if (audio.paused) { audios.forEach(a => a !== audio && a.pause()); audio.play(); } else audio.pause();
+        };
+        audio.onplay = () => { pausarFundoPor("mensagem"); item.classList.add("tocando"); icone.innerHTML = PAUSE; };
+        audio.onpause = audio.onended = () => {
+          item.classList.remove("tocando"); icone.innerHTML = PLAY;
+          if (audios.every(a => a.paused)) retomarFundoPor("mensagem");
+        };
+      });
     }
 
     // Um versículo por dia: muda à meia-noite e é diferente para cada pessoa
@@ -682,6 +722,9 @@
         return;
       }
       document.getElementById("nome-pessoa").textContent = pessoa.nome;
+      // Capa própria da pessoa (ou a arte padrão)
+      document.getElementById("capa-abertura").style.backgroundImage = `url('${pessoa.capa || "arte/arte1.jpg"}')`;
+      if (pessoa.capa_tema === "claro") document.getElementById("abertura").classList.add("clara");
       document.title = pessoa.nome + " · Impacto Radical 2026";
       montarHistoria();
       montarAudio();
