@@ -175,7 +175,8 @@
       "cinza": "#a3909c"
     },
     "subir_historia": 32,
-    "subir_abertura": 16
+    "subir_abertura": 16,
+    "conversa": true
   },
   {
     "id": "esther",

@@ -289,6 +289,77 @@
     /* --- Louvor --- */
     #area-louvor iframe { width: 100%; border: 0; border-radius: 14px; }
 
+    /* ============ CONVERSA (estilo WhatsApp) ============ */
+    #aba-conversa { padding-top: env(safe-area-inset-top); }
+    .zap { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; min-height: calc(100vh - var(--nav-altura) - 40px); }
+    .zap-topo {
+      position: sticky; top: 0; z-index: 3; display: flex; align-items: center; gap: 12px;
+      padding: 14px 18px; background: rgba(var(--noite-rgb),.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(var(--luz-rgb),.14);
+    }
+    .zap-avatar { width: 44px; height: 44px; border-radius: 50%; background: center 40% / cover; border: 1px solid rgba(var(--luz-rgb),.4); }
+    .zap-nome { font-family: var(--serif); font-size: 21px; line-height: 1; }
+    .zap-status { font-size: 12px; color: var(--luz); margin-top: 4px; }
+    .zap-aviso {
+      margin: 14px 16px 4px; padding: 12px 14px; border-radius: 12px; text-align: center;
+      font-size: 12.5px; line-height: 1.55; color: var(--texto-suave);
+      background: rgba(var(--luz-rgb),.08); border: 1px dashed rgba(var(--luz-rgb),.3);
+    }
+    .zap-aviso strong { display: block; color: var(--papel); font-weight: 400; font-family: var(--serif); font-size: 16px; margin-bottom: 2px; }
+    .zap-mensagens { flex: 1; padding: 12px 14px 8px; display: flex; flex-direction: column; gap: 8px; }
+    .zap-balao {
+      position: relative; max-width: 84%; padding: 9px 12px 20px; border-radius: 14px;
+      font-size: 15px; line-height: 1.5; animation: entraBalao .35s ease; word-wrap: break-word;
+    }
+    @keyframes entraBalao { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+    .zap-balao.jesus { align-self: flex-start; background: rgba(var(--papel-rgb),.10); border-top-left-radius: 4px; color: var(--papel); }
+    .zap-balao.eu { align-self: flex-end; background: rgba(var(--luz-rgb),.28); border-top-right-radius: 4px; color: var(--papel); }
+    .zap-balao.dica { font-size: 13.5px; color: var(--texto-suave); }
+    .zap-balao.ajuda { background: rgba(var(--papel-rgb),.16); border: 1px solid rgba(var(--luz-rgb),.45); }
+    .zap-balao a { color: var(--luz); }
+    .zap-hora { position: absolute; right: 10px; bottom: 4px; font-size: 10px; color: var(--cinza-nevoa); }
+    .zap-fala { font-family: var(--serif); font-size: 19px; line-height: 1.4; }
+    .zap-ref { margin-top: 6px; font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase; color: var(--luz); }
+    .zap-rotulo { font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase; color: var(--cinza-nevoa); }
+    .zap-cartao .zap-rotulo { margin-bottom: 6px; }
+    .zap-guardar {
+      margin-top: 12px; background: transparent; color: var(--luz); cursor: pointer;
+      border: 1px solid rgba(var(--luz-rgb),.5); border-radius: 18px; padding: 7px 14px; font-family: var(--sans); font-size: 12px;
+    }
+    .zap-guardar:disabled { opacity: .7; cursor: default; }
+    .zap-louvor { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--papel) !important; }
+    .zap-nota { width: 40px; height: 40px; flex: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; background: rgba(var(--luz-rgb),.2); color: var(--luz); }
+    .zap-balao.digitando { padding: 14px 16px; display: flex; gap: 5px; }
+    .zap-balao.digitando span { width: 7px; height: 7px; border-radius: 50%; background: var(--luz); opacity: .4; animation: pontinho 1.2s infinite; }
+    .zap-balao.digitando span:nth-child(2) { animation-delay: .2s; }
+    .zap-balao.digitando span:nth-child(3) { animation-delay: .4s; }
+    @keyframes pontinho { 0%, 60%, 100% { opacity: .3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-4px); } }
+    .zap-escrever {
+      position: sticky; bottom: calc(var(--nav-altura) + 20px + env(safe-area-inset-bottom)); z-index: 3;
+      display: flex; gap: 8px; align-items: flex-end; padding: 8px 12px;
+    }
+    .zap-escrever textarea {
+      flex: 1; resize: none; border: 1px solid rgba(var(--luz-rgb),.25); border-radius: 22px;
+      background: rgba(var(--noite-rgb),.92); color: var(--papel); padding: 11px 16px;
+      font-family: var(--sans); font-size: 16px; line-height: 1.35; outline: none;
+    }
+    .zap-escrever textarea::placeholder { color: var(--cinza-nevoa); }
+    .zap-escrever button {
+      width: 46px; height: 46px; flex: none; border-radius: 50%; border: 0; cursor: pointer;
+      background: var(--luz); color: var(--noite); display: flex; align-items: center; justify-content: center;
+    }
+    .zap-escrever button svg { width: 20px; height: 20px; fill: currentColor; }
+    .zap-guardados { padding: 10px 16px 0; }
+    .zap-guardados-titulo { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--luz); margin: 18px 0 10px; text-align: center; }
+    .zap-guardado { background: var(--papel); color: #3a3428; border-radius: 6px; padding: 14px 16px; margin-bottom: 10px; font-family: var(--serif); font-size: 18px; line-height: 1.4; }
+    .zap-guardado small { display: block; margin-top: 6px; font-family: var(--sans); font-size: 10px; letter-spacing: .25em; text-transform: uppercase; color: #7d7462; }
+
+    nav.cinco { grid-template-columns: repeat(5, 1fr); }
+    nav.cinco button { letter-spacing: .04em; font-size: 9.5px; }
+    /* Teclado aberto na conversa: esconde o menu para sobrar espaço */
+    body.escrevendo nav { display: none !important; }
+    body.escrevendo .zap-escrever { bottom: calc(10px + env(safe-area-inset-bottom)); }
+
     /* ============ NAVEGAÇÃO INFERIOR ============ */
     nav {
       position: fixed; left: 12px; right: 12px; z-index: 20;
@@ -408,6 +479,8 @@
       </div>
     </section>
 
+    <section class="aba" id="aba-conversa"></section>
+
     <section class="aba" id="aba-louvor">
       <header class="cabecalho">
         <div class="arte-fundo" style="background-image:url('arte/arte1.jpg');background-position:center 30%"></div>
@@ -427,6 +500,9 @@
     <button data-aba="mensagem" onclick="trocarAba(this)">
       <svg viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>Mensagem
     </button>
+    <button data-aba="conversa" onclick="trocarAba(this)" id="nav-conversa" style="display:none">
+      <svg viewBox="0 0 24 24"><path d="M4 19l1.4-3.7A8 8 0 1 1 8.5 18.6z"/><path d="M9 11h.01M12 11h.01M15 11h.01"/></svg>Conversa
+    </button>
     <button data-aba="pote" onclick="trocarAba(this)">
       <svg viewBox="0 0 24 24"><path d="M8 3h8v3H8zM7 6h10l1.5 3v10a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2V9z"/><path d="M9 14h6M9 17h4"/></svg>Potinho
     </button>
@@ -441,6 +517,7 @@
 
   <div id="zoom" onclick="this.classList.remove('aberto')"><img id="zoom-img" alt="" /></div>
 
+  <script src="conversa.js"></script>
   <script>
     // ==============================================================
     // CONFIGURE AQUI
@@ -607,6 +684,7 @@
       document.getElementById("aba-" + btn.dataset.aba).classList.add("ativa");
       window.scrollTo(0, 0);
       if (btn.dataset.aba === "historia") observarPolaroids();
+      if (btn.dataset.aba === "conversa" && !document.querySelector(".zap")) montarConversa();
     }
 
     function montarHistoria() {
@@ -760,6 +838,11 @@
         return;
       }
       document.getElementById("nome-pessoa").textContent = pessoa.nome;
+      // Momento devocional (conversa): só para quem tiver "conversa": true no pessoas.json
+      if (pessoa.conversa) {
+        document.getElementById("nav-conversa").style.display = "";
+        document.getElementById("nav").classList.add("cinco");
+      }
       if (pessoa.tema) aplicarTema(pessoa.tema);
       // Capa própria da pessoa também no topo de todas as abas
       if (pessoa.capa) document.querySelectorAll(".cabecalho .arte-fundo").forEach(el => el.style.backgroundImage = `url('${pessoa.capa}')`);
