@@ -8,6 +8,7 @@ com o link da página e o link do QR code.
 Rode sempre que atualizar alguém:  python gerar_controle.py
 """
 
+import csv
 import json
 import os
 import unicodedata
@@ -82,6 +83,7 @@ def main():
         ws.column_dimensions[c.column_letter].width = largura
     ws.row_dimensions[linha_cab].height = 22
 
+    linhas_csv = [cabecalho]
     linha = linha_cab + 1
     contagem = {"Concluído": 0, "Parcial": 0, "Pendente": 0}
     for nome_completo, obs in lista_de_pessoas():
@@ -111,6 +113,7 @@ def main():
                 c.hyperlink = v
                 c.font = Font(name=FONTE, color="1F5FA8", underline="single")
         contagem[valores[2]] += 1
+        linhas_csv.append(valores)
         linha += 1
 
     ws["B4"], ws["B5"], ws["B6"] = contagem["Concluído"], contagem["Parcial"], contagem["Pendente"]
@@ -123,6 +126,10 @@ def main():
     ws.auto_filter.ref = f"A{linha_cab}:J{ultima}"
 
     wb.save(ARQUIVO)
+
+    # Mesmo conteúdo em CSV: a planilha do Google puxa sozinha com =IMPORTDATA("<site>/controle.csv")
+    with open("controle.csv", "w", newline="", encoding="utf-8") as f:
+        csv.writer(f).writerows(linhas_csv)
     print(f"OK {ARQUIVO}: {ultima - linha_cab} pessoas")
 
 
