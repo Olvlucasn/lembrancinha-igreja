@@ -31,6 +31,7 @@ FONTE = "Arial"
 COR_TITULO = "2A2219"
 COR_CONCLUIDO = "E3F1DF"
 COR_PENDENTE = "FBEBDD"
+COR_PARCIAL = "FFF6D6"
 
 
 def sem_acento(texto):
@@ -65,13 +66,13 @@ def main():
     ws["A2"].font = Font(name=FONTE, size=9, italic=True, color="7A6C52")
 
     # Resumo (fórmulas)
-    ws["A4"], ws["A5"] = "Concluídos", "Pendentes"
-    for linha in (4, 5):
+    ws["A4"], ws["A5"], ws["A6"] = "Concluídos", "Parciais", "Pendentes"
+    for linha in (4, 5, 6):
         ws[f"A{linha}"].font = Font(name=FONTE, bold=True)
         ws[f"B{linha}"].font = Font(name=FONTE, bold=True)
         ws[f"B{linha}"].alignment = Alignment(horizontal="left")
 
-    linha_cab = 7
+    linha_cab = 8
     borda = Border(bottom=Side(style="thin", color="CFC7B2"))
     for col, (titulo, largura) in enumerate(zip(cabecalho, larguras), start=1):
         c = ws.cell(row=linha_cab, column=col, value=titulo)
@@ -82,7 +83,7 @@ def main():
     ws.row_dimensions[linha_cab].height = 22
 
     linha = linha_cab + 1
-    contagem = {"Concluído": 0, "Pendente": 0}
+    contagem = {"Concluído": 0, "Parcial": 0, "Pendente": 0}
     for nome_completo, obs in lista_de_pessoas():
         id_pessoa = id_da_pasta(nome_completo)
         p = no_site.get(id_pessoa)
@@ -95,11 +96,11 @@ def main():
             nome_completo.split()[0].capitalize(),
             nome_completo.title(),
             # Status já calculado (texto puro, para copiar e colar em outra planilha sem quebrar)
-            "Concluído" if tem_capa == "Sim" and fotos and n_versiculos == len(fotos) and n_audios > 0 else "Pendente",
+            ("Parcial" if p.get("pendente") else "Concluído") if tem_capa == "Sim" and fotos and n_versiculos == len(fotos) and n_audios > 0 else "Pendente",
             tem_capa, len(fotos), n_versiculos, n_audios,
             SITE + "?id=" + id_pessoa if p else "",
             SITE + "qrcodes/" + id_pessoa + ".png" if p and os.path.exists(f"qrcodes/{id_pessoa}.png") else "",
-            obs or ("" if p else "Ainda não está no site"),
+            obs or (("Falta: " + p["pendente"]) if p and p.get("pendente") else "" if p else "Ainda não está no site"),
         ]
         for col, v in enumerate(valores, start=1):
             c = ws.cell(row=linha, column=col, value=v)
@@ -112,11 +113,12 @@ def main():
         contagem[valores[2]] += 1
         linha += 1
 
-    ws["B4"], ws["B5"] = contagem["Concluído"], contagem["Pendente"]
+    ws["B4"], ws["B5"], ws["B6"] = contagem["Concluído"], contagem["Parcial"], contagem["Pendente"]
     ultima = linha - 1
     faixa = f"A{linha_cab + 1}:J{ultima}"
     ws.conditional_formatting.add(faixa, FormulaRule(formula=[f'$C{linha_cab + 1}="Concluído"'], fill=PatternFill("solid", fgColor=COR_CONCLUIDO)))
     ws.conditional_formatting.add(faixa, FormulaRule(formula=[f'$C{linha_cab + 1}="Pendente"'], fill=PatternFill("solid", fgColor=COR_PENDENTE)))
+    ws.conditional_formatting.add(faixa, FormulaRule(formula=[f'$C{linha_cab + 1}="Parcial"'], fill=PatternFill("solid", fgColor=COR_PARCIAL)))
     ws.freeze_panes = f"A{linha_cab + 1}"
     ws.auto_filter.ref = f"A{linha_cab}:J{ultima}"
 

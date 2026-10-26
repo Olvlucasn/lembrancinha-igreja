@@ -645,12 +645,13 @@
           <p>Alguém muito especial está preparando uma mensagem só para você. Volte aqui daqui a alguns dias.</p>`;
         return;
       }
+      const itens = lista.map(a => typeof a === "string" ? { src: a } : a);
       const PLAY = '<path d="M8 5v14l11-7z"/>', PAUSE = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
-      cartao.innerHTML = lista.map((src, n) => `
+      cartao.innerHTML = itens.map(({ src, titulo }, n) => `
         <div class="audio-item" id="item-audio-${n}">
           <div class="onda">${Array.from({ length: 18 }, (_, i) => `<span style="animation-delay:${(i % 6) * 0.12}s"></span>`).join("")}</div>
           <button class="btn-play" aria-label="Ouvir mensagem ${n + 1}"><svg viewBox="0 0 24 24">${PLAY}</svg></button>
-          <p class="rotulo">${lista.length > 1 ? "Mensagem " + (n + 1) : "Toque para ouvir"}</p>
+          <p class="rotulo">${titulo ? esc(titulo) : lista.length > 1 ? "Mensagem " + (n + 1) : "Toque para ouvir"}</p>
           <audio src="${esc(src)}" preload="none"></audio>
         </div>`).join("");
       const audios = [...cartao.querySelectorAll("audio")];

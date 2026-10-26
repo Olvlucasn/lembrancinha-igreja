@@ -173,5 +173,58 @@
       "cinza": "#a3909c"
     },
     "subir_historia": 32
+  },
+  {
+    "id": "esther",
+    "nome": "Esther",
+    "capa": "fotos/esther/capa.jpg",
+    "subir_historia": 30,
+    "tema": {
+      "noite": "#1f1529",
+      "luz": "#f3a6c4",
+      "papel": "#f8f0f4",
+      "texto": "#dcc9e0",
+      "cinza": "#9b86a8"
+    },
+    "fotos": [
+      {
+        "src": "fotos/esther/01.jpg",
+        "versiculo": "A bênção do Senhor enriquece.",
+        "ref": "Provérbios 10:22"
+      },
+      {
+        "src": "fotos/esther/02.jpg",
+        "versiculo": "Se possível, quanto depender de vós, tende paz com todos.",
+        "ref": "Romanos 12:18"
+      },
+      {
+        "src": "fotos/esther/03.jpg",
+        "versiculo": "Filhos, obedecei a vossos pais no Senhor.",
+        "ref": "Efésios 6:1"
+      },
+      {
+        "src": "fotos/esther/04.jpg",
+        "versiculo": "O amor nunca falha.",
+        "ref": "1 Coríntios 13:8"
+      },
+      {
+        "src": "fotos/esther/05.jpg",
+        "versiculo": "Há amigo mais chegado do que um irmão.",
+        "ref": "Provérbios 18:24"
+      },
+      {
+        "src": "fotos/esther/06.jpg",
+        "versiculo": "Ninguém tem maior amor do que este: de dar alguém a própria vida em favor dos seus amigos.",
+        "ref": "João 15:13"
+      }
+    ],
+    "audios": [
+      {
+        "src": "audios/esther/louvor.mp3",
+        "titulo": "Louvor · Um Instrumento em Tuas Mãos"
+      }
+    ],
+    "pendente": "áudio dos pais",
+    "mensagem": ""
   }
 ]
