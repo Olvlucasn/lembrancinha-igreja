@@ -355,6 +355,7 @@ async function digitarEEnviar(partes) {
     await espera(Math.min(1200 + tamanho * 22, 3800));
     digitando(false);
     if (parte.tipo === "jesus") {
+      conversa.usados.add(parte.fala[1] + parte.fala[0].slice(0, 12)); // não repetir esta fala depois
       balao("jesus", `<div class="zap-fala">${parte.fala[0]}</div><div class="zap-ref">${parte.fala[1]}</div>`);
     } else if (parte.tipo === "versiculo") {
       const [texto, ref] = parte.fala;
