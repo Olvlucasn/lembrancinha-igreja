@@ -52,7 +52,8 @@
       "texto": "#dccfbf",
       "cinza": "#a18c74"
     },
-    "subir_historia": 36
+    "subir_historia": 36,
+    "subir_abertura": 15
   },
   {
     "id": "ramon",
@@ -132,7 +133,8 @@
       "texto": "#c9c6bc",
       "cinza": "#8f8c84"
     },
-    "abertura": "baixo"
+    "abertura": "baixo",
+    "subir_abertura": 12
   },
   {
     "id": "isabelly",
@@ -172,7 +174,8 @@
       "texto": "#e2cfd3",
       "cinza": "#a3909c"
     },
-    "subir_historia": 32
+    "subir_historia": 32,
+    "subir_abertura": 16
   },
   {
     "id": "esther",
@@ -225,7 +228,8 @@
       }
     ],
     "pendente": "áudio dos pais",
-    "mensagem": ""
+    "mensagem": "",
+    "subir_abertura": 14
   },
   {
     "id": "pedro",
