@@ -306,10 +306,11 @@
       background: rgba(var(--luz-rgb),.08); border: 1px dashed rgba(var(--luz-rgb),.3);
     }
     .zap-aviso strong { display: block; color: var(--papel); font-weight: 400; font-family: var(--serif); font-size: 16px; margin-bottom: 2px; }
-    .zap-mensagens { flex: 1; padding: 12px 14px 8px; display: flex; flex-direction: column; gap: 8px; }
+    .zap-mensagens { flex: 1; padding: 12px 14px 24px; display: flex; flex-direction: column; gap: 8px; }
     .zap-balao {
       position: relative; max-width: 84%; padding: 9px 12px 20px; border-radius: 14px;
       font-size: 15px; line-height: 1.5; animation: entraBalao .35s ease; word-wrap: break-word;
+      scroll-margin-bottom: calc(var(--nav-altura) + 110px);
     }
     @keyframes entraBalao { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
     .zap-balao.jesus { align-self: flex-start; background: rgba(var(--papel-rgb),.10); border-top-left-radius: 4px; color: var(--papel); }
@@ -336,13 +337,17 @@
     @keyframes pontinho { 0%, 60%, 100% { opacity: .3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-4px); } }
     .zap-escrever {
       position: sticky; bottom: calc(var(--nav-altura) + 20px + env(safe-area-inset-bottom)); z-index: 3;
-      display: flex; gap: 8px; align-items: flex-end; padding: 8px 12px;
+      display: flex; gap: 8px; align-items: flex-end; padding: 10px 12px 8px;
+      background: linear-gradient(to bottom, rgba(var(--noite-rgb),0), var(--noite) 30%);
     }
     .zap-escrever textarea {
       flex: 1; resize: none; border: 1px solid rgba(var(--luz-rgb),.25); border-radius: 22px;
       background: rgba(var(--noite-rgb),.92); color: var(--papel); padding: 11px 16px;
       font-family: var(--sans); font-size: 16px; line-height: 1.35; outline: none;
+      caret-color: var(--luz); overflow-y: hidden; scrollbar-width: none;
     }
+    .zap-escrever textarea::-webkit-scrollbar { display: none; }
+    .zap-escrever textarea:focus { border-color: rgba(var(--luz-rgb),.55); }
     .zap-escrever textarea::placeholder { color: var(--cinza-nevoa); }
     .zap-escrever button {
       width: 46px; height: 46px; flex: none; border-radius: 50%; border: 0; cursor: pointer;

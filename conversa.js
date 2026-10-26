@@ -166,7 +166,7 @@ const SENTIMENTOS = {
     louvores: [["Ressuscita-me", "Aline Barros"], ["Oceanos", "Ana Nóbrega"]],
   },
   gratidao: {
-    palavras: ["feliz", "alegr", "grato", "grata", "gratidao", "obrigad", "bencao", "abencoad", "consegui", "passei", "deu certo", "agradec", "muito bem", "otimo", "maravilh"],
+    palavras: ["feliz", "alegr", "grato", "grata", "gratidao", "obrigad", "bencao", "abencoad", "consegui", "passei", "passei na", "passei no", "deu certo", "agradec", "muito bem", "otimo", "maravilh"],
     jesus: [
       ["Tenho-vos dito isto para que a minha alegria permaneça em vós, e a vossa alegria seja completa.", "João 15:11"],
       ["Eu vim para que tenham vida, e a tenham em abundância.", "João 10:10"],
@@ -199,7 +199,43 @@ const SENTIMENTOS = {
 const SINAIS_DE_RISCO = ["me matar", "suicid", "quero morrer", "vontade de morrer", "nao quero mais viver", "acabar com a minha vida", "tirar minha vida", "me machucar", "me cortar", "me cortando", "automutil", "sumir pra sempre", "sumir para sempre", "nao aguento mais viver"];
 const SINAIS_DE_ABUSO = ["abusou", "abuso", "me bate", "me bateu", "apanho", "apanhei", "violencia", "estupr", "me tocou", "tocou em mim", "me ameaca", "me ameacou", "assedi"];
 
+// Mensagens curtas do dia a dia: resposta curta, sem novo versículo
+const RESPOSTAS_LEVES = {
+  agradecimento: {
+    palavras: ["obrigad", "brigad", "valeu", "vlw", "grato", "grata", "gratidao", "agradeco"],
+    jesus: [["A paz seja convosco.", "João 20:19"], ["Vai-te em paz.", "Lucas 7:50"]],
+    dica: "Sempre que quiser conversar de novo, é só escrever aqui.",
+  },
+  amem: {
+    palavras: ["amem", "aleluia", "gloria a deus", "gloria"],
+    jesus: [["Bem-aventurados os que ouvem a palavra de Deus e a guardam.", "Lucas 11:28"]],
+    dica: "Guarde essa palavra no coração. Quando quiser, é só escrever de novo.",
+  },
+  saudacao: {
+    palavras: ["oi", "oii", "ola", "bom dia", "boa tarde", "boa noite jesus", "eai", "e ai", "opa", "hey"],
+    jesus: [["A paz seja convosco.", "João 20:19"]],
+    dica: "Como está o seu coração hoje?",
+  },
+  despedida: {
+    palavras: ["tchau", "ate mais", "ate logo", "ate amanha", "boa noite", "fui", "falou", "flw"],
+    jesus: [["E eis que estou convosco todos os dias, até a consumação dos séculos.", "Mateus 28:20"]],
+    dica: "Até logo. Volte sempre que precisar.",
+  },
+  concordancia: {
+    palavras: ["ok", "okay", "ta bom", "ta", "entendi", "sim", "certo", "uhum", "aham", "beleza", "blz", "vou ouvir", "vou ler"],
+    jesus: [["Permanecei em mim, e eu permanecerei em vós.", "João 15:4"]],
+    dica: "Se quiser, conte mais sobre o que está sentindo.",
+  },
+};
+
 const conversa = { usados: new Set(), ocupado: false };
+
+// A palavra precisa começar no início de uma palavra do texto
+// (assim "obrigado" não é confundido com "briga")
+function temPalavra(texto, palavra) {
+  const p = palavra.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp("(^|[^a-z0-9])" + p).test(texto);
+}
 
 function semAcento(t) {
   return t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
@@ -214,13 +250,22 @@ function sortear(lista) {
 
 function entenderSentimento(texto) {
   const t = semAcento(texto);
-  if (SINAIS_DE_RISCO.some(p => t.includes(p))) return "risco";
-  if (SINAIS_DE_ABUSO.some(p => t.includes(p))) return "abuso";
+  if (SINAIS_DE_RISCO.some(p => temPalavra(t, p))) return "risco";
+  if (SINAIS_DE_ABUSO.some(p => temPalavra(t, p))) return "abuso";
   let melhor = "geral", pontos = 0;
   for (const [nome, s] of Object.entries(SENTIMENTOS)) {
-    const p = s.palavras.filter(palavra => t.includes(palavra)).length;
+    const p = s.palavras.filter(palavra => temPalavra(t, palavra)).length;
     if (p > pontos) { melhor = nome; pontos = p; }
   }
+  // Mensagem curta sem sentimento claro: obrigado, amém, oi, tchau, ok... ou pedir para contar mais
+  const curta = t.split(/\s+/).filter(Boolean).length <= 5;
+  if (curta && melhor === "geral") {
+    for (const [nome, r] of Object.entries(RESPOSTAS_LEVES)) {
+      if (r.palavras.some(p => temPalavra(t, p))) return "leve:" + nome;
+    }
+    return "contar-mais";
+  }
+  if (curta && melhor === "gratidao" && RESPOSTAS_LEVES.agradecimento.palavras.some(p => temPalavra(t, p))) return "leve:agradecimento";
   return melhor;
 }
 
@@ -252,7 +297,7 @@ function montarConversa() {
 
   const form = document.getElementById("zap-form");
   const campo = document.getElementById("zap-texto");
-  campo.addEventListener("input", () => { campo.style.height = "auto"; campo.style.height = Math.min(campo.scrollHeight, 120) + "px"; });
+  campo.addEventListener("input", () => { campo.style.height = "auto"; campo.style.height = Math.min(campo.scrollHeight, 120) + "px"; campo.style.overflowY = campo.scrollHeight > 120 ? "auto" : "hidden"; });
   campo.addEventListener("focus", () => document.body.classList.add("escrevendo"));
   campo.addEventListener("blur", () => setTimeout(() => document.body.classList.remove("escrevendo"), 150));
   campo.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); } });
@@ -354,6 +399,16 @@ function responder(texto) {
         Se estiver em perigo agora, ligue <a href="tel:190">190</a>.` },
       { tipo: "versiculo", fala: ["Perto está o Senhor dos que têm o coração quebrantado.", "Salmos 34:18"] },
     ]);
+    return;
+  }
+
+  if (sentimento.startsWith("leve:")) {
+    const r = RESPOSTAS_LEVES[sentimento.slice(5)];
+    digitarEEnviar([{ tipo: "jesus", fala: sortear(r.jesus) }, { tipo: "dica", html: r.dica }]);
+    return;
+  }
+  if (sentimento === "contar-mais") {
+    digitarEEnviar([{ tipo: "dica", html: "Conte um pouco mais: o que está acontecendo no seu coração? Pode escrever do seu jeito, sem pressa." }]);
     return;
   }
 
