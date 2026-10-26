@@ -769,6 +769,12 @@
         arte.style.top = `-${pessoa.subir_historia}%`;
         arte.style.bottom = `${pessoa.subir_historia}%`;
       }
+      // Sobe a arte da abertura (em % da tela) para Jesus não ficar atrás do botão
+      if (pessoa.subir_abertura) {
+        const capa = document.getElementById("capa-abertura");
+        capa.style.top = `-${pessoa.subir_abertura}%`;
+        capa.style.bottom = `${pessoa.subir_abertura}%`;
+      }
       // Capa própria da pessoa (ou a arte padrão)
       document.getElementById("capa-abertura").style.backgroundImage = `url('${pessoa.capa || "arte/arte1.jpg"}')`;
       if (pessoa.capa_tema === "claro") document.getElementById("abertura").classList.add("clara");

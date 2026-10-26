@@ -226,5 +226,59 @@
     ],
     "pendente": "áudio dos pais",
     "mensagem": ""
+  },
+  {
+    "id": "pedro",
+    "nome": "Pedro",
+    "capa": "fotos/pedro/capa.jpg",
+    "subir_historia": 38,
+    "subir_abertura": 20,
+    "tema": {
+      "noite": "#1a0f10",
+      "luz": "#f2675a",
+      "papel": "#f6eeec",
+      "texto": "#e3cfcc",
+      "cinza": "#9a7f7c"
+    },
+    "fotos": [
+      {
+        "src": "fotos/pedro/01.jpg",
+        "versiculo": "Toda boa dádiva e todo dom perfeito vêm do alto.",
+        "ref": "Tiago 1:17"
+      },
+      {
+        "src": "fotos/pedro/02.jpg",
+        "versiculo": "A misericórdia do Senhor é de eternidade a eternidade.",
+        "ref": "Salmos 103:17"
+      },
+      {
+        "src": "fotos/pedro/03.jpg",
+        "versiculo": "Perto está o Senhor dos que têm o coração quebrantado.",
+        "ref": "Salmos 34:18"
+      },
+      {
+        "src": "fotos/pedro/04.jpg",
+        "versiculo": "Bem-aventurados os pacificadores.",
+        "ref": "Mateus 5:9"
+      },
+      {
+        "src": "fotos/pedro/05.jpg",
+        "versiculo": "Eu e a minha casa serviremos ao Senhor.",
+        "ref": "Josué 24:15"
+      },
+      {
+        "src": "fotos/pedro/06.jpg",
+        "versiculo": "Oh! Como é bom e agradável viverem unidos os irmãos!",
+        "ref": "Salmos 133:1"
+      }
+    ],
+    "audios": [
+      {
+        "src": "audios/pedro/louvor.mp3",
+        "titulo": "Louvor · Cheio do Senhor"
+      }
+    ],
+    "pendente": "áudio dos pais",
+    "mensagem": ""
   }
 ]
