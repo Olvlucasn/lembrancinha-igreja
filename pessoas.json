@@ -176,7 +176,8 @@
     },
     "subir_historia": 32,
     "subir_abertura": 16,
-    "conversa": true
+    "conversa": true,
+    "extras": true
   },
   {
     "id": "esther",
