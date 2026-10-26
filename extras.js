@@ -149,8 +149,10 @@ function extrasConversa() {
     const form = document.getElementById("zap-form");
     form.insertAdjacentHTML("beforebegin", `<div class="zap-atalhos" id="zap-atalhos">${atalhos.map(a => `<button type="button">${a}</button>`).join("")}</div>`);
     const caixa = document.getElementById("zap-atalhos");
-    caixa.querySelectorAll("button").forEach(b => b.onclick = () => {
-      if (conversa.ocupado) return;
+    caixa.querySelectorAll("button").forEach(b => b.onclick = async () => {
+      caixa.classList.add("some");
+      // Se Jesus ainda estiver "digitando", espera terminar e envia em seguida
+      while (conversa.ocupado) await new Promise(r => setTimeout(r, 200));
       document.getElementById("zap-texto").value = b.textContent;
       form.requestSubmit();
     });
