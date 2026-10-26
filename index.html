@@ -709,7 +709,8 @@
 
     function montarLouvor() {
       const area = document.getElementById("area-louvor");
-      const m = LOUVOR_SPOTIFY.match(/open\.spotify\.com\/(?:intl-[a-z-]+\/)?(track|album|playlist|episode)\/([A-Za-z0-9]+)/);
+      // Cada pessoa pode ter o seu louvor ("louvor" no pessoas.json); senão usa o padrão
+      const m = (pessoa.louvor || LOUVOR_SPOTIFY).match(/open\.spotify\.com\/(?:intl-[a-z-]+\/)?(track|album|playlist|episode)\/([A-Za-z0-9]+)/);
       if (!m) {
         area.innerHTML = '<div class="cartao"><p class="em-breve">Em breve…</p><p>O louvor escolhido para você vai aparecer aqui.</p></div>';
         return;
