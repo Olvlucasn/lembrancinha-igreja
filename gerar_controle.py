@@ -21,7 +21,7 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 # CONFIGURE AQUI
 # ==============================================================
 SITE = "https://olvlucasn.github.io/lembrancinha-igreja/"
-PASTA_DRIVE = r"C:\Users\lucasn\Downloads\Concluidos Impacto somente imagens"
+PASTA_DRIVE = r"C:\Users\lucasn\Downloads\Impacto organização"
 # Pessoas que ainda não estão na pasta do Drive (nome completo, observação)
 EXTRAS = []
 ARQUIVO = "controle.xlsx"
