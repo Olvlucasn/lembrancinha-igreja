@@ -11,6 +11,7 @@ Rode sempre que atualizar alguém:  python gerar_controle.py
 import json
 import os
 import unicodedata
+from datetime import date
 
 from openpyxl import Workbook
 from openpyxl.formatting.rule import FormulaRule
@@ -60,12 +61,11 @@ def main():
 
     ws["A1"] = "Lembrancinhas Impacto Radical 2026 - controle"
     ws["A1"].font = Font(name=FONTE, size=14, bold=True, color=COR_TITULO)
-    ws["A2"] = "Gerada pelo script gerar_controle.py a partir do pessoas.json. Status = Concluído quando tem capa, versículo em todas as fotos e pelo menos 1 áudio."
+    ws["A2"] = "Atualizada em " + date.today().strftime("%d/%m/%Y") + " pelo script gerar_controle.py. Status = Concluído quando tem capa, versículo em todas as fotos e pelo menos 1 áudio."
     ws["A2"].font = Font(name=FONTE, size=9, italic=True, color="7A6C52")
 
     # Resumo (fórmulas)
-    ws["A4"], ws["B4"] = "Concluídos", '=COUNTIF(C8:C200,"Concluído")'
-    ws["A5"], ws["B5"] = "Pendentes", '=COUNTIF(C8:C200,"Pendente")'
+    ws["A4"], ws["A5"] = "Concluídos", "Pendentes"
     for linha in (4, 5):
         ws[f"A{linha}"].font = Font(name=FONTE, bold=True)
         ws[f"B{linha}"].font = Font(name=FONTE, bold=True)
@@ -82,6 +82,7 @@ def main():
     ws.row_dimensions[linha_cab].height = 22
 
     linha = linha_cab + 1
+    contagem = {"Concluído": 0, "Pendente": 0}
     for nome_completo, obs in lista_de_pessoas():
         id_pessoa = id_da_pasta(nome_completo)
         p = no_site.get(id_pessoa)
@@ -93,8 +94,8 @@ def main():
         valores = [
             nome_completo.split()[0].capitalize(),
             nome_completo.title(),
-            # Status calculado pela própria planilha
-            f'=IF(AND(D{linha}="Sim",E{linha}>0,F{linha}=E{linha},G{linha}>0),"Concluído","Pendente")',
+            # Status já calculado (texto puro, para copiar e colar em outra planilha sem quebrar)
+            "Concluído" if tem_capa == "Sim" and fotos and n_versiculos == len(fotos) and n_audios > 0 else "Pendente",
             tem_capa, len(fotos), n_versiculos, n_audios,
             SITE + "?id=" + id_pessoa if p else "",
             SITE + "qrcodes/" + id_pessoa + ".png" if p and os.path.exists(f"qrcodes/{id_pessoa}.png") else "",
@@ -108,8 +109,10 @@ def main():
             if col in (8, 9) and v:
                 c.hyperlink = v
                 c.font = Font(name=FONTE, color="1F5FA8", underline="single")
+        contagem[valores[2]] += 1
         linha += 1
 
+    ws["B4"], ws["B5"] = contagem["Concluído"], contagem["Pendente"]
     ultima = linha - 1
     faixa = f"A{linha_cab + 1}:J{ultima}"
     ws.conditional_formatting.add(faixa, FormulaRule(formula=[f'$C{linha_cab + 1}="Concluído"'], fill=PatternFill("solid", fgColor=COR_CONCLUIDO)))
